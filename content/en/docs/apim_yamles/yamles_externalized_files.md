@@ -6,14 +6,15 @@
 "description": "Learn how to work with externalized files within YAML configuration."
 }
 
-Note that is topic is unrelated to [Environmentalization](/docs/apim_yamles/yamles_environmentalization).
+{{% alert title="Note" %}}This topic is not related to [Environmentalization](/docs/apim_yamles/yamles_environmentalization).{{% /alert %}}
 
-Some entities have fields that contain the content of a file, for example a script, or a certificate. In the XML federated configuration, these files were embedded within the XML making them hard to edit in an editor more suited to the file content. In a YAML configuration, the content of these files is stored in separate external files. This provides the following advantages:
+Some entities have fields that contain the content of a file, for example a script or a certificate. In the XML federated configuration, these files were embedded within the XML making them hard to edit. In a YAML configuration, the content of these files is stored in separate external files. This provides the following advantages:
 
 * They can be easily read without unnecessary encoding.
 * You can create and edit these files using a text editor (IDE) of your choice.
+* Files and directory can have long names by default, but you can rename your external file as you wish.
 
-This an example:
+For example, the following YAML file contains a field `Set Backend message`, which content is stored in a JSON file:
 
 ```yaml
 ---
@@ -48,14 +49,14 @@ Content of `Get organizationId - Set Backend message.json`:
 
 The location of an externalized file is always relative to the directory of the YAML file referencing it. In the above example, both files are in the same directory.
 
-{{< alert title="Note">}}You can name your external file as you wish. As for any YAML file not named after its entity key fields, if the entity is modified by ES Explorer, or via the Entity Store API, it will be renamed using the default naming scheme.{{< /alert >}}
+## Externalized files default naming scheme
 
-## Externalized files naming scheme
+During conversion from FED, externalized file names are generated as in the following table, and you cannot use this convention afterwards.
 
-| Entity (as named in Policy Studio) | EntityType | Field | Externalized file name scheme | Possible extensions | Additional rules | Environmentalization possible inside file content |
+| Entity | EntityType | Field | Externalized file name scheme | Possible extensions | Additional rules | Environmentalization possible inside file content |
 | --- | --- | --- | --- | --- | --- | --- |
 | Script language / Scripts (in Resources) | `JavaScriptFilter`, `Script` | `script#ref` | `<Parent entity>-Scripts/<entity field "name">` | `.groovy`, `.js`, `.nashorn.js`, `.py` |  | Yes |
-| Set Message (Policy Filter) | FilterCircuit | `body#ref` | `<Parent entity>-<entity field "name">` | `.json`, `.html`, `.xml`, `.txt` | Only multi-line body is externalize. Extension depends on content type content. | Yes |
+| Set Message (Policy Filter) | FilterCircuit | `body#ref` | `<Parent entity>-<entity field "name">` | `.json`, `.html`, `.xml`, `.txt` | Only multi-line body is externalized. Extension depends on content type content. | Yes |
 | JSON Schema | `JSONSchema` | `contents#ref` | `<entity field "name">` | `.json` |  | Yes |
 | Certificate | `Certificate` | `content#ref` | `<entity field "dname">-cert` | `.pem` | [How to add a new certificate](/docs/apim_yamles/yamles_edit/#how-to-add-a-new-certificate-and-private-key-to-a-yaml-configuration) | No |
 |             |               | `key#refbinay` | `<entity field "dname">-key` | `.pem` | [How to add a private key](/docs/apim_yamles/yamles_edit/#how-to-add-a-new-certificate-and-private-key-to-a-yaml-configuration) | No |
@@ -67,4 +68,5 @@ The location of an externalized file is always relative to the directory of the 
 |                   |                | `sslStashFile#binary`       | `<entity field "name">` | `.ssl.key`   | SSL Stash file                      | No |
 |                   |                | `sslKeyFile#binary`         | `<entity field "name">` | `.ssl.stash` | SSL Key file                        | No |
 
-{{< alert title="Note">}}`#ref` and `#refbinary` naming convention might evolve in the future.{{< /alert >}}
+* The entities are named as in Policy Studio.
+* `#ref` and `#refbinary` naming convention might evolve in the future.

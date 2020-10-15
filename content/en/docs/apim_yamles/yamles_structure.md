@@ -101,24 +101,25 @@ Each entity in the entity store is identified by one or several key fields. For 
 By default, after having converted your entity store to YAML:
 
 * A directory is named after the key field value in `_parent.yaml` contained in the directory. The key field is `name` in most of the cases.
-* A YAML file is named after the value of its key fields. In case of multiple key fields, it is concatenation of them separated by a coma.
+* A YAML file is named after the value of its key fields. In case of multiple key fields, it is a concatenation of them separated by coma.
 
 {{< alert title="Note">}}File system incompatible characters such as `/\":<>*?|` will be replaced by `_` (underscores).{{< /alert >}}
 
-These are the good practices to name your entities and files:
+The following are the good practices to name your entities:
 
-* Name your file after your entity. If it has several key fields, do your best to represent those key fields.
-* Use short but meaningful names. If a name exceeds 40 characters, the last part of the name will be replaced by a hash code.
-* Use only letters and numbers.
+* Name your file after your entity.
+* Use short but meaningful names. Make sure to create names shorter than 40 symbols (Some systems do not supports it).
+* It is preferable to use only letters and numbers.
+* File names for multiple key fields are rare, but should be as meaningful as possible.
 
-Sometimes you cannot respect the rules, and some key fields will contain forbidden characters. For example, for entity type `JSONSchema` key field is `URL`. If the value of URL is `http://json-schema.org/address`, then the YamlPK could be `/Resources/JSON Schemas/http://json-schema.org/address`.
+Sometimes you cannot follow those best practices, and some key fields will contain incompatible characters for a filename. For example, for entity type `JSONSchema` key field is `URL`. If the value of URL is `http://json-schema.org/address`, then the YamlPK could be `/Resources/JSON Schemas/http://json-schema.org/address`.
 
-The YAML entity store will handle this case as follows:
+When converting the YAML entity store from a FED:
 
 * The file will be named `http_json-schema.org_address.yaml` (with `:` and `/` replaced by `_`).
-* The YamlPK is still valid even if it contains several `/`. It is used as a whole internally.
+* The YamlPK is still valid even if it contains several `/`. The key is used as a globally internally.
 
-If your entity file is not named using the entity key fields, it will work. However, if the entity is modified by ES Explorer, or via the entity store API, your files will be renamed to use the default naming scheme, that is, the name of the entity or the concatenation of the key fields.
+You can rename your YAML files after their key fields to make it easier to find your files when the only piece of information you can get is a YamlPK printed out in logs (Gateway, yamles validation, and so on).
 
 ## Entity files model
 
