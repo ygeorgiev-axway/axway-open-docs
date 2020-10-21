@@ -1,9 +1,9 @@
 {
-"title": "Use the CLI to convert API Gateway configuration",
-"linkTitle": "Use the CLI to convert configuration",
+"title": "Convert API Gateway configuration using CLI",
+"linkTitle": "Convert API Gateway configuration using CLI",
 "weight":"30",
 "date": "2020-09-24",
-"description": "Learn how to use the YAML configuration CLI tool."
+"description": "Learn how to use the YAML configuration CLI tool to convert API Gateway configuration to YAML format."
 }
 
 The `yamles` CLI tool is available in the `apigateway/posix/bin` directory. It is installed with a standard server-side install or with client tooling, when the **Package & Deploy Tools only** option is selected during the installation.
@@ -27,43 +27,68 @@ To get help with a specific option, run:
 ./yamles <option> --help
 ```
 
-All script parameters have shorthand parameter names, check the relevant help for more information.
+All script parameters have shorthand parameter names. Check the relevant help for more information.
 
 All script options generate a trace file in the current directory by default. You can use `--tracedir` to write trace to another directory, or `--tracelevel` to change the level of tracing.
 
+{{< alert title="Note">}}
+For Windows systems, the CLI tool is located in the `apigateway\Win32\bin` directory. You must replace all `./yamles ...` with `yamles.bat ...`.
+
+Also, all options with URLs must be set as follows:
+
+* FED: `--fed-url federated:file:/C:/Users/.../configs.xml`
+* YAML: `--yaml-url  yaml:file:/C:/Users/...`
+{{< /alert >}}
+
 ## Convert your XML configuration to a YAML configuration
 
-The starting point for using the YAML format is to convert an existing valid upgraded XML federated configuration, which can be stored in a `.fed` file, a `.pol`, or a `.pol` and `.env`, or in the usual format of a set of XML files.
+To start using the YAML format, you must convert an existing valid upgraded XML federated configuration, which can be stored in a `.fed` file, a `.pol`, or a `.pol` and `.env`, or in the usual format of a set of XML files.
 
 {{< alert title="Note">}}Converting XML configuration fragments to YAML is not supported directly. To convert an XML configuration fragment, import the fragment into a factory XML federated configuration, then convert it to YAML.{{< /alert >}}
 
-Before converting your XML federated configuration you must upgrade it using [upgradeconfig](/docs/apim_installation/apigw_upgrade/upgrade_analytics/#upgradeconfig-options) or [projupgrade](docs/apim_reference/devopstools_ref/#projupgrade-command-options).
+Before converting your XML federated configuration, you must upgrade it using [upgradeconfig](/docs/apim_installation/apigw_upgrade/upgrade_analytics/#upgradeconfig-options) or [projupgrade](docs/apim_reference/devopstools_ref/#projupgrade-command-options).
 
 The `--output-dir` must always be specified. This is the location where the YAML configuration will be written. Optionally, if the `--targz` option is used, the conversion will also create a `.tar.gz` file that is ready for deployment. The `.tar.gz` is created in addition to the content in the `--output-dir`.
 
-The following are examples of the various usages of the `fed2yaml` option in the `yamles` CLI. Use the following help command for more detail on each parameter.
+The following are examples of how you can use the `fed2yaml` option in the `yamles` CLI:
+
+Convert an XML federated configuration by specifying a URL for the XML and place the YAML configuration into the `/home/user/yaml` directory. Make sure to include the `configs.xml` when using `--fed-url`:
+
+```
+./yamles fed2yaml --fed-url federated:file:/home/user/apiprojects/myfed/configs.xml --output-dir /home/user/yaml
+```
+
+Convert an XML federated configuration by specifying a URL for the XML and place the YAML configuration into the `/home/user/yaml` directory, and create a `.tar.gz` file of the content of `/home/user/yaml`:
+
+```
+./yamles fed2yaml --fed-url federated:file:/home/user/apiprojects/myfed/configs.xml --output-dir /home/user/yaml --targz /home/user/archives/myconfig.tar.gz
+```
+
+Convert an XML federated configuration by specifying a `.fed` file for the XML and place the YAML configuration into the `/home/user/yaml` directory:
+
+```
+./yamles fed2yaml --fed /home/user/archives/config.fed --output-dir /home/user/yaml
+```
+
+You can use the `--fed-dir` parameter to convert multiple XML federated configurations in one run. For example, if you point to your Policy Studio `apiprojects` directory, all projects will be converted. A sub-directory of the same name is created in the `--output-dir` to contain the converted YAML configuration. If used in this way, the `--targz` should be set to a directory name, not a `tar.gz` filename, to create a `.tar.gz` for each converted configuration.
+
+You can set the `--targz` parameter with the same value as the `--output-dir`. This can also be used to convert a single XML federated configuration by specifying a directory that contains a single XML federated configuration. In this case, ensure your `--output-dir` does not already exist. The `--targz` is not supported when used with `--fed-dir`. For a single XML federated configuration, use `--fed-url` instead if you want to convert and create the `--targz` in one command:
+
+```
+./yamles fed2yaml --fed-dir /home/user/apiprojects/myconf --output-dir /home/user/yaml
+```
+
+Create an XML federated configuration by merging a `.pol` and `.env` files. Then, convert the result file to YAML. A `.pol` file may be specified on its own, but a `.env` file must be combined with a `.pol`:
+
+```
+./yamles fed2yaml --fed /home/user/archives/mypol.pol --env /home/user/archives/myenv.env --output-dir /home/user/yaml
+```
+
+You can run the following help command for more details on each parameter:
 
 ```
 yamles fed2yaml --help
 ```
-
-* `./yamles fed2yaml --fed-url federated:file:/home/user/apiprojects/myfed/configs.xml --output-dir ~/yaml`:
-
-    Convert an XML federated configuration by specifying a URL for the XML and place the YAML configuration into the `~/yaml directory`. Make sure to include the `configs.xml` when using `--fed-url`.
-* `./yamles fed2yaml --fed-url federated:file:/home/user/apiprojects/myfed/configs.xml --output-dir ~/yaml --targz /home/user/archives/myconfig.tar.gz`:
-
-    Convert an XML federated configuration by specifying a URL for the XML and place the YAML configuration into the `~/yaml` directory, and create a `.tar.gz` file of the content of `~/yaml`.
-* `./yamles fed2yaml --fed /home/user/archives/config.fed --output-dir ~/yaml`:
-
-    Convert an XML federated configuration by specifying a `.fed` file for the XML and place the YAML configuration into the `~/yaml` directory.
-* `./yamles fed2yaml --fed-dir /home/user/apiprojects/myconf --output-dir ~/yaml`:
-
-    You can use the `--fed-dir` parameter to convert multiple XML federated configurations in one run. For example, if you point to your Policy Studio `apiprojects` directory, all projects will be converted. A sub-directory of the same name is created in the `--output-dir` to contain the converted YAML configuration. If used in this way, the `--targz` should be set to a directory name, not a `tar.gz` filename, to create a `.tar.gz` for each converted configuration.
-
-    You can set the `--targz` parameter to the same value as the `--output-dir`. This can also be used to convert a single XML federated configuration by specifying a directory that contains a single XML federated configuration. In this case, ensure your `--output-dir` does not already exist. The `--targz` is not supported when used with `--fed-dir`. For a single XML federated configuration, use `--fed-url` instead if you want to convert and create the `--targz` in one command.
-* `./yamles fed2yaml --fed /home/user/archives/mypol.pol --env /home/user/archives/myenv.env --output-dir ~/yaml`:
-
-    Create an XML federated configuration by merging a `.pol` and `.env` file, and then convert it to YAML. A `.pol` file may be specified on its own, but a `.env` file must be combined with a `.pol`.
 
 {{< alert title="Note">}}There is no facility to convert a YAML configuration back to XML, and this will not be supported in the future.{{< /alert>}}
 
@@ -73,32 +98,45 @@ To learn how to solve conversion errors, see [known conversion errors](/docs/api
 
 To make changes to your YAML configuration file, use an IDE or editor of your choice. Your editor can assist with ensuring that the YAML is valid, and that it is indented properly. The `yamles` validate option can assist to ensure that the content you have added or modified is valid according to the Entity Store model. The error content will point towards the YAML file where the problem is located.
 
-The following are examples of the various usages of the validate option in the `yamles` CLI. Use the following help command for more detail on each parameter.
+The following are examples of how you can use the validate option in the `yamles` CLI.
+
+Validate a YAML configuration by specifying a URL:
+
+```
+./yamles validate --yaml-url yaml:file:/home/user/apiprojects/myyaml
+```
+
+Validate an encrypted YAML configuration by specifying a URL and passphrase:
+
+```
+./yamles validate --yaml-url yaml:file:/home/user/apiprojects/myyaml --passphrase changeme
+```
+
+Validate a YAML configuration in a .tar.gz file:
+
+```
+./yamles validate --targz /home/user/archives/myconfig.tar.gz
+```
+
+Validate a YAML configuration by specifying a directory:
+
+```
+./yamles validate --yaml-dir /home/user/yaml
+```
+
+You can run the following help command for more details on each parameter:
 
 ```
 yamles validate --help
 ```
 
-* `./yamles validate --yaml-url yaml:file:/home/user/apiprojects/myyaml`:
-
-    Validate a YAML configuration by specifying a URL.
-* `./yamles validate --yaml-url yaml:file:/home/user/apiprojects/myyaml --passphrase changeme`:
-
-    Validate an encrypted YAML configuration by specifying a URL and passphrase.
-* `./yamles validate --targz /home/user/archives/myconfig.tar.gz`:
-
-    Validate a YAML configuration in a .tar.gz file.
-* `./yamles validate --yaml-dir /home/user/yaml`:
-
-    Validate a YAML configuration by specifying a directory.
-
-The `--yaml-dir` parameter may also be used to valid multiple YAML configurations in one run. For example, if you converted all your XML Policy Studio projects in the `~/apiprojects` directory to YAML with an `--output-dir` of `~/yaml-apiprojects`, you could point to your `~/yaml-apiprojects` directory, and all projects will be validated.
+The `--yaml-dir` parameter might also be used to validate multiple YAML configurations in one run. For example, if you converted all your XML Policy Studio projects in the `apiprojects` directory to YAML with an `--output-dir` of `yaml-apiprojects`, you could point to your `yaml-apiprojects` directory, and all projects will be validated.
 
 ### Disable entity reference check
 
-In some cases you may have a valid configuration that points to an entity that exists in another configuration. This is the case for [Team Development](/docs/apim_yamles/apim_yamles_references/yamles_team_development) when you wish to keep common configuration in a separate project for reuse purposes. You may need to validate each configuration separately before merging without generating errors for fields that point to entities that exist elsewhere. Use the `--allow-invalid-ref` option to ensure that an error is not generated in this case. With this parameter enabled, warnings are traced but no error is generated.
+In some cases, you might have a valid configuration that points to an entity that exists in another configuration. This is the case for [Team Development](/docs/apim_yamles/apim_yamles_references/yamles_team_development) when you want to keep common configuration in a separate project for reuse purposes. You might need to validate each configuration separately before merging without generating errors for fields that point to entities that exist elsewhere. Use the `--allow-invalid-ref` option to ensure that an error is not generated in this case. With this parameter enabled, warnings are traced but no error is generated.
 
-This section covers examples of issues that may be found using the validate option. ERRORs are shown on stdout. Note that WARNINGs will only be listed on stdout if there are other ERRORs. If only WARNINGs are found, they are listed in the trace file only.
+This section covers examples of issues that might occur while using the validate option. Note that errors are shown on stdout, Warnings will only be listed on stdout if there are other errors, and if only warnings are found, they are listed in the trace file only.
 
 To learn how to solve conversion errors, see [known validation errors](/docs/apim_yamles/apim_yamles_references/yamles_known_validation_errors).
 
@@ -110,13 +148,31 @@ If you get an error when attempting to encrypt the YAML configuration, that indi
 
 It is also possible to encrypt a YAML configuration at deployment time via [projdeploy](/docs/apim_reference/devopstools_ref/#projdeploy-command-options).
 
-The following are examples of the various usages of the `encrypt` option in the `yamles` CLI to encrypt an unencrypted YAML configuration. Use the following help command for more detail on each parameter:
+The following are examples of how you can use the `encrypt` option in the `yamles` CLI to encrypt an unencrypted YAML configuration.
 
-```yamles encrypt --help```
+Encrypt a YAML configuration by specifying a URL with passphrase `changeme`:
 
-* `./yamles encrypt --yaml-url yaml:file:/home/user/apiprojects/myyaml --passphrase changeme`: Encrypt a YAML configuration by specifying a URL with passphrase `changeme`.
-* `./yamles encrypt --targz /home/user/archives/myconfig.tar.gz --passphrase changeme`: Encrypt a YAML configuration in a `.tar.gz` file with passphrase `changeme`.
-* `./yamles encrypt --yaml-dir /home/user/yaml --passphrase changeme`: Encrypt a single YAML configuration by specifying a directory with passphrase `changeme`.
+```
+./yamles encrypt --yaml-url yaml:file:/home/user/apiprojects/myyaml --passphrase changeme
+```
+
+Encrypt a YAML configuration in a `.tar.gz` file with passphrase `changeme`:
+
+```
+./yamles encrypt --targz /home/user/archives/myconfig.tar.gz --passphrase changeme
+```
+
+Encrypt a single YAML configuration by specifying a directory with passphrase `changeme`:
+
+```
+./yamles encrypt --yaml-dir /home/user/yaml --passphrase changeme
+```
+
+You can run the following help command for more details on each parameter:
+
+```
+yamles encrypt --help
+```
 
 ## Encrypt strings and files to add to an encrypted YAML configuration
 
@@ -124,7 +180,9 @@ If the XML federated configuration you converted to YAML was encrypted with a pa
 
 Use the following command to encrypt the database password string value:
 
-```./yamles encrypt --text "dbpassword" --passphrase "changeme"```
+```
+./yamles encrypt --text "dbpassword" --passphrase "changeme"
+```
 
 The output will be as follows:
 
@@ -159,23 +217,40 @@ If you have encrypted your YAML configuration you may wish to encrypt it with a 
 
 It is also possible to change the passphrase of a YAML configuration at deployment time via [projdeploy](/docs/apim_reference/devopstools_ref/#projdeploy-command-options).
 
-The following are examples of the various usages of the `change-passphrase` option in the `yamles` CLI.
+The following are examples of how you can use the `change-passphrase` option in the `yamles` CLI.
 
-Use the following help command for more detail on each parameter.
+Change the passphrase of a YAML configuration by specifying a URL from `changeme` to `newpassphrase`:
 
-```yamles change-passphrase --help```
+```
+./yamles change-passphrase --yaml-url yaml:file:/home/user/apiprojects/myyaml --old-passphrase changeme --new-passphrase newpassphrase
+```
 
-* `./yamles change-passphrase --yaml-url yaml:file:/home/user/apiprojects/myyaml --old-passphrase changeme --new-passphrase newpassphrase`:
+Decrypt a YAML configuration currently encrypted with passphrase `changeme`:
 
-    Change the passphrase of a YAML configuration by specifying a URL from `changeme` to `newpassphrase`.
-* `./yamles change-passphrase --yaml-url yaml:/home/user/apiprojects/myyaml --old-passphrase changeme --new-passphrase ""`:
+```
+./yamles change-passphrase --yaml-url yaml:/home/user/apiprojects/myyaml --old-passphrase changeme --new-passphrase ""
+```
 
-    Decrypt a YAML configuration currently encrypted with passphrase `changeme`.
-* `./yamles change-passphrase --targz /home/user/archives/myconfig.tar.gz --old-passphrase changeme --new-passphrase newpassphrase`:
+Change the passphrase of a YAML configuration in a `.tar.gz` file from `changeme` to `newpassphrase`:
 
-    Change the passphrase of a YAML configuration in a `.tar.gz` file from `changeme` to `newpassphrase`.
-* `./yamles change-passphrase --yaml-dir /home/user/yaml --old-passphrase changeme --new-passphrase newpassphrase`:
+```
+./yamles change-passphrase --targz /home/user/archives/myconfig.tar.gz --old-passphrase changeme --new-passphrase newpassphrase
+```
 
-    Change the passphrase of a single YAML configuration by specifying a directory from `changeme` to `newpassphrase`.
-* `./yamles change-passphrase --yaml-url yaml:file:/home/user/apiprojects/myyaml --old-passphrase changeme --new-passphrase`:
-    Encrypt an unencrypted YAML configuration, this is equivalent to the "encrypt" option.
+Change the passphrase of a single YAML configuration by specifying a directory from `changeme` to `newpassphrase`:
+
+```
+./yamles change-passphrase --yaml-dir /home/user/yaml --old-passphrase changeme --new-passphrase newpassphrase
+```
+
+Encrypt an unencrypted YAML configuration, this is equivalent to the "encrypt" option:
+
+```
+./yamles change-passphrase --yaml-url yaml:file:/home/user/apiprojects/myyaml --old-passphrase changeme --new-passphrase
+```
+
+You can run the following help command for more details on each parameter:
+
+```
+yamles change-passphrase --help
+```
