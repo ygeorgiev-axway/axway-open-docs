@@ -280,9 +280,35 @@ validation_schemas:
    2_group: http://acme.com/schemas/group
 ```
 
+### Escape quotation marks in values.yaml
+
+Follow these guidelines to avoid issues when using quotation marks in strings:
+
+* Use two single quotation marks for double quotation marks enclosed string (`" "`).
+* Use four single quotation marks for single quotation marks enclosed string (`' '`).
+
+For example, when your environmentalization placeholder is surrounded by single quotation marks:
+
+```yaml
+fields:
+  url: '{{ foo.bar.url.value }}'
+```
+
+For example, to set `value` with `a message with 'single quotation marks'`, you can use:
+
+```yaml
+value: "a message with ''single quotation marks'' "
+```
+
+or
+
+```yaml
+value: 'a message with ''''single quotation marks'''' '
+```
+
 ## Environmentalization in `values.yaml`
 
-You can use the `{{ env "XYZ" }}` syntax in the `values.yaml` file so you can decouple where the value is coming from and where it is used as follows:
+To decouple where the value of an environment variable is coming from and where it is used, use the `{{ env "XYZ" }}` syntax in the `values.yaml` file:
 
 ```yaml
 ---
@@ -290,7 +316,7 @@ db:
   host: {{ env "DB_HOST" }} # you set a value an environment variable per environment
 ```
 
-Later in your development life cycle, you could decide that it is a fixed value that does not change between all environments and change the `values.yaml` to:
+If you want to set a fixed value that does not change between all environments, change the `values.yaml` to:
 
 ```yaml
 ---
@@ -298,7 +324,7 @@ db:
   host: db.com
 ```
 
-Alternatively, you can choose to use a different `values.yaml` for each environment. So for the staging environment you could have:
+Alternatively, to use a different `values.yaml` for each environment, set it as follows:
 
 ```yaml
 # values.yaml for staging
@@ -323,7 +349,7 @@ This can all be done without changing the YAML file for the entity that always p
 ---
 type: DBConnection
 fields:
-    # just showing e18n fields
+    # just showing environmentalization fields
     host: {{ db.host }}
 ```
 
