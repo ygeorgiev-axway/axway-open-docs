@@ -34,7 +34,9 @@ When an entity store is edited via ES Explorer or the entity store API, some fie
 
 ## Config fragment
 
-There is no YAML equivalent of a configuration fragment for export or import purposes.
+* You can convert an XML configuration fragment to YAML.
+* You can view and edit the YAML configuration fragment in ES Explorer.
+* It is not yet possible to import or export YAML configuration fragments.
 
 ## Environmentalized key fields
 
