@@ -262,7 +262,7 @@ Before enabling the scanning feature, you must install two packages in your mach
 
 Both packages are available in EPEL.
 
-After installing the packages, you must start _ClamAV daemon_, the daemon that API Portal uses to scan the files.
+After installing the packages, you must start *ClamAV daemon*, the daemon that API Portal uses to scan the files.
 
 After starting the daemon, you can enable scanning of uploaded files:
 
@@ -316,6 +316,19 @@ TraceEnable off
 
 # Enable GET, POST and PUT methods. Must be separated by a space character.
 AllowMethods GET POST PUT
+```
+
+## Prevent host header attack
+
+To prevent host header attacks, we recommend to whitelist `Host` and `X-Forwarded-Host` headers. When the values of the headers do not match the whitelist, the request is redirected to API Portal homepage. To whitelist headers, add the following configuration to your `.htaccess` or virtual host file. (Replace the placeholder URL with your domain):
+
+```
+RewriteCond %{HTTP_HOST} !^([a-zA-Z0-9-_]{1,20}.){0,3}APIPORTAL_DOMAIN$
+RewriteRule ^(.*)$ https://APIPORTAL_YOUR_DOMAIN/ [R=301,L]
+
+RewriteCond %{HTTP:X-Forwarded-Host} !^$
+RewriteCond %{HTTP:X-Forwarded-Host} !^([a-zA-Z0-9-_]{1,20}.){0,3}APIPORTAL_DOMAIN$
+RRewriteRule ^(.*)$ https://APIPORTAL_YOUR_DOMAIN/ [R=301,L]
 ```
 
 ## Protect the integrity of the logging system
