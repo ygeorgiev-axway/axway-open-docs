@@ -4,7 +4,6 @@ linkTitle: API Portal November 2020
 weight: 60
 date: 2020-11-05
 ---
-
 ## Summary
 
 API Portal provides an API consumer-facing interface that you can customize to match your corporate brand. API Portal is a layered product linked to API Manager, and requires both API Manager and API Gateway. For more information, see the API Gateway and API Manager documentation.
@@ -19,31 +18,22 @@ API Portal is available as a software installation or a virtualized deployment i
 
 ## New features and enhancements
 
-### placeholder
+### Easy upgrade from 7.5.5 and 7.6.2 to 7.7 November
 
-placeholder
+With API Portal 7.5.5 and 7.6.2 reaching end of support in November 2020, we are looking at ways to help customers make the jump to the latest 7.7 update.​ The `apiportal_cumulative_upgrade.sh` is a cumulative script that you can use to upgrade an environment from 7.5.5 or 7.6.2 directly to the latest 7.7 update​. For more information, see [Upgrade API Portal using the cumulative upgrade script](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-api-portal-using-the-cumulative-upgrade-script).
 
 ## Limitations of this update
 
 This update has the following limitations:
 
-* API Portal 7.7.20200930 is compatible with API Gateway and API Manager 7.7.20200930 only.
-* Upgrade directly to API Portal 7.7.20200930 is supported from [API Portal 7.7](/docs/apim_relnotes/201904_release/apip_relnotes/) only.
-* To upgrade from earlier versions (for example, 7.5.5, 7.6.2) you must first upgrade to API Portal 7.7. For more information see [API Portal single version upgrade](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-from-api-portal-7-6-2) to upgrade versions incrementally.
-* You can use the [cumulative upgrade script](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-api-portal-using-the-cumulative-upgrade-script) to upgrade directly from earlier versions (for example, 7.5.5, 7.6.2) to API Portal [7.7 July](/docs/apim_relnotes/20200730_apip_relnotes/), then apply this upgrade package to update your API Portal to the September release.
-* The ready-made API Portal Docker image 7.7.20200730 is strictly for development environments only, and it is not recommended for use in production environments.
-
-    It is not recommended to use the image in production environments because the image is built with CentOS as a base OS, and our Axway security scans have detected multiple security concerns with this OS. We continue to monitor the latest versions of this base OS to determine if these issues have been resolved, but until we can ship a hardened image that passes our security concerns, we cannot advise customers to use this image in a production environment. A Docker image for production use is already planned in the [API Portal 2020 roadmap](https://community.axway.com/s/api-portal).
+* API Portal 7.7.20201130 is compatible with API Gateway and API Manager 7.7.20201130 only.
+* Upgrade to API Portal 7.7.20201130 is supported from [API Portal 7.7](/docs/apim_relnotes/201904_release/apip_relnotes/) only. You can use the [cumulative upgrade script](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-api-portal-using-the-cumulative-upgrade-script) to upgrade directly from earlier versions (for example, 7.5.5, 7.6.2) to API Portal 7.7 November, or see [API Portal single version upgrade](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-from-api-portal-7-6-2) to upgrade versions incrementally.
 * Upgrading from previous API Portal Docker image is not supported.
 * This update is not available as a virtual appliance or as a managed service on Axway Cloud.
 
 ## Important changes
 
 It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this update.
-
-### placeholder heading for Important changes
-
-placeholder text for Important changes
 
 ## Deprecated features
 
@@ -53,9 +43,13 @@ As part of our software development life cycle we constantly review our API Mana
 
 ## Removed features
 
-<!-- Add features that are removed here -->
+### Enable user listing configuration
 
-To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. As part of this review, no capabilities have been removed.
+After a recent security fix in API Manager, the **Enable user listing** option is no longer needed in API Portal, and has been removed.
+
+For previous versions of API Portal, which still use the **Enable user listing** option, see [API Portal - Customize application sharing settings](https://support.axway.com/en/admin/kbadmin/article-details/id/181283).
+
+Related Issues: IAP-3616, RDAPI-17343
 
 ## Fixed issues
 
@@ -66,19 +60,49 @@ This version of API Portal includes:
 
 ### Fixed security vulnerabilities
 
-Insert table of issues here
+| Internal ID | Case ID | CVE Identifier | Description  |
+| ----------- | ------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IAP-3180    |         |                | **Issue**: PII (Personally identifiable information) appearing in log files. **Resolution**: PII such as user name is replaced with associated GUID in log files.                                                                                                                                                                                   |
+| IAP-3179    |         |                | **Issue**: Insufficient logging for successful logins, access control failures, failed input validation attempts. **Resolution**: Now each log entry includes the necessary information that would help in a detailed investigation of the timeline when an event has happened.                                                                     |
+| IAP-3579    | 1195741 |                | **Issue**: XSS was possible on TryIt page. **Resolution**: The \`apiId\` query param is now sanitized before outputted.                                                                                                                                                                                                                             |
+| IAP-3175    |         |                | **Issue**: When SSO is configured, log information coming from untrusted sources is not sanitized in any way, making it possible for an attacker to inject new lines in the logs. **Resolution**: The data now is sanitized.                                                                                                                        |
+| IAP-3652    | 1195741 |                | **Issue**: HTTP Host header can be controlled by an attacker. **Resolution**: Documentation was update whith information on how to prevent this. For more information, see [Prevent host header attack](/docs/apim_installation/apiportal_install/secure_harden_portal/index.html#prevent-host-header-attack). |
+| IAP-3178    |         |                | **Issue**: Passwords containing leading or trailing spaces were trimmed. **Resolution**: Leading or trailing spaces are considered as legitimate characters in password.      |
 
 ### Other fixed issues
 
-Insert table of issues here
+| Internal ID | Case ID | Description    |
+| ----------- | ------- | ----------------------------------- |
+| IAP-3559    | 1190447 | **Issue**: Generated authentications do not appear when Applications page is disabled. **Resolution**: Generated authentications are now displayed regardless Applications page status. |
+| IAP-3564    | 1190447 | **Issue**: 'Create Application' button remains on Try-It page even when it is disabled in JAI. **Resolution**: JAI config option is taken into account.                                 |
+| IAP-3730    | 1207734 | **Issue**: SQL query that is supposed to run only on upgrade, was also executed on installation. **Resolution**: The query is now executed only on upgrade.                             |
 
 ## Known issues
 
 The following are known issues for this update.
 
-### placeholder heading for know issues
+### When Multi Manager feature is configured, API Portal users are no longer able to login
 
-placeholder text for know issues
+After a recent bug fix in API Manager (RDAPI-20021), the `Authenticate to Master` policy is no longer working in releases earlier than [API Portal July 2020](/docs/apim_relnotes/20200730_apip_relnotes/). To fix this, perform the following steps:
+
+1. Open all slave managers configurations in Policy Studio, and click to **Edit** the `AuthenticateToMaster` policy.
+2. Click the **Login to Master** (Connect to URL) filter, and enter `Accept: */*` for the **Request Protocol Header**.
+3. Click the **Enter** key twice to create two blank lines after `Accept: */*`.
+
+Related Issue:IAP-3435
+
+### Page layout and alignment for Arabic language
+
+Changing the API Portal language to Arabic (or any other right to left language) results in issues with page layout and alignment on the API Portal Home and Pricing pages, and some buttons are not visible. As a workaround, you can turn on the development mode in JAI. Follow these steps:
+
+1. Log in to Joomla! Admin Interface (JAI).
+2. In the JAI top navigation bar, click **Extensions > Templates**.
+3. Click your template style (for example, `purity_III * Default`) to open it.
+4. Click the **General** tab.
+5. Change **Development Mode** to `ON`.
+6. Click **Save** and click **Close** to close the template style.
+
+Related Issue: IAP-308
 
 ## Documentation
 
