@@ -30,15 +30,15 @@ The `common-security` project created using the `Common Project` template, conta
 Both of these projects can be converted separately to YAML using the `yamles fed2yaml` option.
 
 ```
-./yamles fed2yaml --fed-url federated:file:/home/user/apiprojects/common-security/configs.xml -o ~/team-dev/common-security --targz ~/team-dev/archives/common-security.tar.gz
-./yamles fed2yaml --fed-url federated:file:/home/user/apiprojects/test-api/configs.xml -o ~/team-dev/test-api --targz ~/team-dev/archives/test-api.tar.gz
+./yamles fed2yaml --source federated:file:/home/user/apiprojects/common-security/configs.xml -o ~/team-dev/common-security --targz ~/team-dev/archives/common-security.tar.gz
+./yamles fed2yaml --source federated:file:/home/user/apiprojects/test-api/configs.xml -o ~/team-dev/test-api --targz ~/team-dev/archives/test-api.tar.gz
 ```
 
 They may be separately validated as follows:
 
 ```
-./yamles validate --yaml-url yaml:file:/home/user/team-dev/common-security
-./yamles validate --yaml-url yaml:file:/home/user/team-dev/test-api --allow-invalid-ref
+./yamles validate --source yaml:file:/home/user/team-dev/common-security
+./yamles validate --source yaml:file:/home/user/team-dev/test-api --allow-invalid-ref
 ```
 
 Note the use of `--allow-invalid-ref` for the `test-api` project as it has a reference to an entity in the `common-security` project in the `System/Global Properties.yaml` file:

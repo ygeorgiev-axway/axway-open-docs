@@ -36,7 +36,7 @@ When an entity store is edited via ES Explorer or the entity store API, some fie
 
 * You can convert an XML configuration fragment to YAML.
 * You can view and edit the YAML configuration fragment in ES Explorer.
-* It is not yet possible to import or export YAML configuration fragments.
+* It is not yet possible to import or export YAML configuration fragments in ES Explorer, this can only be done using the `yamles` CLI.
 
 ## Environmentalized key fields
 
