@@ -1,6 +1,6 @@
 {
-"title": "Encrypt YAML configuartion using CLI",
-"linkTitle": "Encrypt YAML configuartion using CLI",
+"title": "Encrypt YAML configuration using CLI",
+"linkTitle": "Encrypt YAML configuration using CLI",
 "weight":"70",
 "date": "2020-11-11",
 "description": "Learn how to use the YAML configuration CLI to encrypt, decrypt, and re-encrypt a YAML configuration."
