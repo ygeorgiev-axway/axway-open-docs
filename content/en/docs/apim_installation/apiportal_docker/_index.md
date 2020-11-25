@@ -51,4 +51,4 @@ Data is persistent as long as the Docker container exists:
 
 ## Non-root user
 
-By default, API Portal container runs as a non-root container. Although this makes containers more secure, it has some volumes-related issues too.
+By default, API Portal container runs as a non-root container, which makes containers more secure but results in some volumes-related issues. For more information, see the [data persistence](/docs/apim_installation/apiportal_docker/docker_portal_run_image/#create-data-volumes-to-persist-data) section.
