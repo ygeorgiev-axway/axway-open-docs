@@ -67,13 +67,11 @@ This update has the following limitations:
 
 ## Important changes
 
-It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this update.
+There are no major changes in this update.
 
 ## Deprecated features
 
-<!-- Add features that are deprecated here -->
-
-As part of our software development life cycle we constantly review our API Management offering. As part of this review, no capabilities have been deprecated.
+No capabilities have been deprecated in this update.
 
 ## Removed features
 

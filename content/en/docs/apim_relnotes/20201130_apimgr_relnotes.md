@@ -22,54 +22,40 @@ An automated script to back up and restore Cassandra clusters is now included in
 
 ### Enhanced support for OAS3 parameters
 
-Support for the OpenAPI specification 3 (OAS3) parameter attributes is now enriched. The `allowEmptyValue` and `explode` fields, as well as the free-form parameter definition are all supported in this version of API Manager.
+Support for the OpenAPI specification 3 (OAS3) parameter attributes is now enriched. The `allowEmptyValue` and `explode` fields, as well as the free-form parameter definition, are all supported in this version of API Manager.
 
 ### Enhanced API life cycle management for Organization administrators
 
-We have [previously](/docs/apim_relnotes/20200930_apimgr_relnotes/#organization-administrators-can-publish-apis) released a system property, `api.manager.orgadmin.selfservice.enabled`, to include additional permissions for an Organization Administrator to publish and unpublish APIs that were created in their organization without approval from an API Administrator.
+We have [previously](/docs/apim_relnotes/20200930_apimgr_relnotes/#organization-administrators-can-publish-apis) released a system property, `api.manager.orgadmin.selfservice.enabled`, to include additional permissions for an Organization administrator to publish and unpublish APIs that were created in their organization without approval from an API Administrator.
 
-In this release, additional API life cycle events (deprecate, undeprecate, upgrade, and grant access to APIs) will also be enabled for an Organization administrator when `api.manager.orgadmin.selfservice.enabled` is set to True.
+In this update, additional API life cycle events (deprecate, undeprecate, upgrade, and grant access to APIs) will also be enabled for an Organization administrator when `api.manager.orgadmin.selfservice.enabled` is set to True.
 
 For more information, see [System property changes](/docs/apim_reference/system_props/).
 
 ## Important changes
 
-It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this update.
+There are no major changes in this update.
 
-<!-- Use this section to describe any changes in the behavior of the product (as a result of features or fixes), for example, new Java system properties in the jvm.xml file. This section could also be used for any important information that doesn't fit elsewhere. -->
-
-### placeholder heading for Important changes
-
-placeholder text for Important changes
+<!-- It is important, especially when upgrading from an earlier version, to be aware of the following changes in the behavior or operation of the product in this update.. -->
 
 ## Deprecated features
 
-<!-- As part of our software development life cycle we constantly review our API Management offering. As part of this review, no capabilities have been deprecated. -->
+<!-- As part of our software development life cycle we constantly review our API Management offering. In this update, the following capabilities have been deprecated. -->
 
-As part of our software development life cycle we constantly review our API Management offering.
-
-The following capabilities have been deprecated.
-
-### placeholder heading for Deprecated features
-
-placeholder text for Deprecated features
+No capabilities have been deprecated in this update.
 
 ## Removed features
 
-<!-- To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. As part of this review, no capabilities have been removed -->
+No capabilities have been removed in this update.
 
-To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. As part of this review, the following features have been removed:
-
-### placeholder heading for Removed features
-
-placeholder text for Removed features
+<!-- To stay current and align our offerings with customer demand and best practices, Axway might discontinue support for some capabilities. As part of this review, the following features have been removed: -->
 
 ## Fixed issues
 
 This version of API Gateway and API Manager includes:
 
 * Fixes from all 7.5.3, 7.6.2, and 7.7 service packs released prior to this version. For details of all the service pack fixes included, see the corresponding *SP Readme* attached to each service pack on [Axway Support](https://support.axway.com).
-* Fixes from all 7.7 updates released prior to this version. For details of all the update fixes included, see the corresponding [release note](/docs/apim_relnotes/) for each 7.7 update.
+* Fixes from all 7.7 updates released prior to this version. For details of all the update fixes included, see the corresponding [Release note](/docs/apim_relnotes/) for each 7.7 update.
 
 ### Fixed security vulnerabilities
 
@@ -179,17 +165,11 @@ The following are known issues for this update.
 | RDAPI-22459 | Accept header in per-method override is not replacing header                                                                                                       |
 | RDAPI-22513 | Package properties not visible, PS and CS tools on Linux                                                                                                           |
 
-### Policy Studio help documentation
-
-This update includes changes to the Policy Studio documentation, but the version of the documentation (Eclipse Help) shipped with Policy Studio is out of sync with the online documentation and does not include these changes.
-
-We are working to rectify this issue in a future update. In the meantime, you can find the up to date documentation online at [Develop in Policy Studio](/docs/apim_policydev/).
-
 ## Update a classic (non-container) deployment
 
-To update your API Gateway, see [Update from API Gateway One Version](/docs/apim_installation/apigw_upgrade/upgrade_steps_oneversion/).
+To **update** your API Gateway, see [Update from API Gateway One Version](/docs/apim_installation/apigw_upgrade/upgrade_steps_oneversion/).
 
-To upgrade from an older version of the product, see [Upgrade from API Gateway 7.5.x or 7.6.x](/docs/apim_installation/apigw_upgrade/upgrade_steps_extcass/).
+To **upgrade** from an older version, see [Upgrade from API Gateway 7.5.x or 7.6.x](/docs/apim_installation/apigw_upgrade/upgrade_steps_extcass/).
 
 ## Update a container deployment
 
@@ -201,12 +181,11 @@ The `fed` now contains the updates for the API Manager configuration and can be 
 
 This section describes documentation enhancements and related documentation.
 
-### Documentation enhancements
+### Policy Studio help documentation
 
-The following new instructions and enhancements are available in the documentation.
+This update includes changes to the Policy Studio documentation, but the version of the documentation (Eclipse Help) shipped with Policy Studio is out of sync with the online documentation and does not include these changes.
 
-* placeholder.
-* placeholder.
+We are working to rectify this issue in a future update. In the meantime, you can find the up to date documentation online at [Develop in Policy Studio](/docs/apim_policydev/).
 
 ### API Management open source documentation
 
