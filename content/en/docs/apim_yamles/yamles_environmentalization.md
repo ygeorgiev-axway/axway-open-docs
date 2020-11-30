@@ -6,31 +6,31 @@
 "description": "Learn how to environmentalize your YAML configuration."
 }
 
-The XML federated configuration provides several ways to environmentalize parts of the configuration. See [Environmentalize configuration](/docs/apigtw_devops/promotion_arch/#environmentalize-configuration) for details.
+The XML federated configuration provides different ways to environmentalize parts of the configuration. See [Environmentalize configuration](/docs/apigtw_devops/promotion_arch/#environmentalize-configuration) for details.
 
-The YAML configuration format replaces any environmentalization done via Policy Studio, which is enabled in Policy Studio through **Preferences > Environmentalization > Allow environmentalization** with an improved method of environmentalization using the `{{ env "XYZ" }}` syntax. The conversion process will look after the replacement of this type of environmentalization. Selectors such as `${environment.XYZ}` and `${env.XYZ}` will continue to work as before.
+The YAML configuration format replaces any environmentalization done via Policy Studio, which is enabled in Policy Studio through **Preferences > Environmentalization > Allow environmentalization**, with an improved method of environmentalization using the `{{ env "XYZ" }}` syntax. The conversion process will look after the replacement of this type of environmentalization. Selectors such as `${environment.XYZ}` and `${env.XYZ}` will continue to work as before.
 
 YAML environmentalization capabilities can be applied to:
 
 * All entities.
-* A field's value. This is possible for all types of fields: numeric, string, references, passwords.
-* Part of a string field's value.
-* Some or all of the content in externalized files such as Scripts, Messages, and Json Schemas. See column **Environmentalization possible inside file content** of table [Externalized files naming Scheme](/docs/apim_yamles/yamles-externalized_files#externalized-files-naming-scheme)
+* The value of a field. This is possible for all types of fields: numeric, string, references, passwords.
+* Part of the value of a string.
+* Some or all of the content in externalized files such as Scripts, Messages, and JSON Schemas. For more information, see **Environmentalization possible inside file content** column of the [Externalized files naming Scheme](/docs/apim_yamles/yamles-externalized_files#externalized-files-naming-scheme) table.
 
 The following table describes all of the supported environmentalization options for the YAML format:
 
 | Feature / File | Syntax | Description |
 | -------------- | ------ | ----------- |
-| YAML style           | `{{ env "XYZ" }}` | This syntax is allowed anywhere, and replaces the Policy Studio Environmentalization feature. Evaluated by API Gateway at load time using system environment variables, which means that you are warned about missing system environment variables sooner. |
+| YAML style           | `{{ env "XYZ" }}` | This syntax is allowed anywhere, and it replaces the Policy Studio Environmentalization feature. Evaluated by API Gateway at load time using system environment variables, which means that you are warned about missing system environment variables sooner. |
 | Environment selector | `${environment.XYZ}` | Only supported for fields that support selectors in the runtime. Evaluated by API Gateway at runtime using system environment variables. This can be replaced by the {{ env "XYZ" }} syntax. |
-| envSettings.properties | ${env.xyz} | Evaluated by API Gateway at load time using envSettings.props content specific to an instance. It is likely these settings will remain as they are as they are instance-specific as opposed to environment-specific. |
-| system.properties | `${system.xyz}` | Evaluated by API Gateway at load time using `system.properties` file content. |
+| envSettings.properties | `${env.xyz}` | Evaluated by API Gateway, at load time, using envSettings.props content specific to an instance. It is likely these settings will remain as they are as they are instance-specific as opposed to environment-specific. |
+| system.properties | `${system.xyz}` | Evaluated by API Gateway, at load time, using `system.properties` file content. |
 
 ## Enable environmentalization
 
-To enable this feature, create a file named `values.yaml` in the root directory of your directory of the YAML entity store.
+To enable environmentalization, create a file named `values.yaml` in the root directory where your YAML entity store is installed.
 
-The following is a simple example of environmentalization:
+The following is an example of environmentalization:
 
 ```yaml
 # Environmentalized entity in the YAML configuration
@@ -73,7 +73,7 @@ fields:
 
 `{{ ... }}` placeholders are replaced when the configuration is loaded by the API Gateway or in ES Explorer.
 
-References can also be environmentalized. This is how certificates are environmentalized. For example:
+When you environmentalize references, the certificates also get environmentalized. For example:
 
 ```yaml
 # Environmentalized FilterCircuit entity in the YAML configuration
@@ -122,13 +122,13 @@ certs:
   sign: /Environment Configuration/Certificate Store/{{ env "CERT_DNAME" }}
 ```
 
-Your CI/CD pipeline must ensure that any certificates and keys are packaged up correctly for each environment in the `.tar.gz` that gets deployed. If you attempt to validate a YAML configuration that uses a system environment variable on a system that does not have a value set for that environment variable, you will need to use the `--allow-invalid-ref` option. See [Disabling entity reference check](/docs/apim_yamles/yamles_cli/#disabling-entity-reference-check) for details.
+Your CI/CD pipeline must ensure that any certificates and keys are packaged up correctly for each environment in the `.tar.gz` that gets deployed. If you attempt to validate a YAML configuration that uses a system environment variable on a system that does not have a value set for that environment variable, you will need to use the `--allow-invalid-ref` option. For more information, see [Disabling entity reference check](/docs/apim_yamles/yamles_cli/#disabling-entity-reference-check).
 
 In a nutshell, the YAML configuration is a template where you can environmentalize all types of values.
 
 ## Environmentalization syntax
 
-The following are elements of the environmentalization sintax.
+The following are elements of the environmentalization syntax.
 
 ### Variables
 
@@ -140,46 +140,7 @@ Expression can contain:
 
 * Simple properties: `{{ foo }}`
 * Nested properties: `{{ foo.bar }}`
-* Indexed properties: `{{ foo.bar.[0] }}`. or the equivalent `{{ foo.bar.0}}`. This syntax is useful for multiple values of field.
-
-### Conditions
-
-**Scope:** YAML Entity files or compatible externalized files.
-
-Blocks of data can be added or suppressed based on boolean expression.
-
-```
-{{#if hideExpression}}
-  hide: true
-{{/if}}
-```
-
-```
-{{#unless hideExpression}}
-  hide: false
-{{/unless}}
-```
-
-Example to setup a block of config at once.
-
-```yaml
----
-type: DbConnection
-fields:
-  url: jdbc:mysql://127.0.0.1:3306/DefaultDb
-  password: ""
-  name: Default Database Connection
-  username: root
-{{#unless db.useDefaultDbPoolConfig}}
-  initialSize: 10
-  maxActive: 50
-  maxIdle: 5
-  maxWait: 5
-  minEvictableIdleTimeMillis: 5000
-  numTestsPerEvictionRun: 2
-  timeBetweenEvictionRunsMillis: 10000
-{{/unless}}
-```
+* Indexed properties: `{{ foo.bar.[0] }}`, or the equivalent `{{ foo.bar.0}}`. This syntax is useful for multiple values of the field.
 
 ### Environment and JVM variables
 
@@ -188,7 +149,7 @@ fields:
 * YAML entity files
 * `values.yaml` files
 
-You can environmentalize the settings using system environment variables, like `${environment.XYZ}`, except that it can be done anywhere; and JVM properties `-Dxyz` when starting a java process such as the API Gateway.
+You can environmentalize the settings using system environment variables, like `${environment.XYZ}`, except that it can be done anywhere; and JVM properties `-Dxyz`, when starting a java process, such as the API Gateway.
 
 Environmentalize with no default value:
 

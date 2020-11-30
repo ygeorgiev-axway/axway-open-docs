@@ -20,11 +20,11 @@ Custom entity types are not supported in YAML configuration.
 
 ## Team development
 
-* Limited support of Team development.
-* No tooling support to look for merge conflicts.
-* Ordering of tar-level merges needs to be considered.
+* Support of Team development using `yamles import` command, where you must import each project one at a time.
+* No explicit support for project dependencies.
+* No explicit support to look for merge conflicts. You must use `_fragment.yaml` directives to manage it.
 
-For more information, see [Team Development with YAML configuration](/docs/apim_yamles/apim_yamles_references/yamles_team_development).
+For more information, see [Team development with YAML configuration](/docs/apim_yamles/apim_yamles_references/yamles_team_development).
 
 ## ES Explorer
 
@@ -37,6 +37,12 @@ When an entity store is edited via ES Explorer or the entity store API, some fie
 * You can convert an XML configuration fragment to YAML.
 * You can view and edit the YAML configuration fragment in ES Explorer.
 * It is not yet possible to import or export YAML configuration fragments in ES Explorer, this can only be done using the `yamles` CLI.
+
+## Import of config fragment into environmentalized YAML configuration
+
+When you import a YAML configuration fragment into a YAML configuration using `yamles import`, the environmentalization settings (for example, `{{ db.host }}`) in entity YAML files are replaced with their resolved values if they can be resolved, or `invalid field`, if they cannot be resolved.
+
+We recommend you to avoid importing into YAML configurations that use environmentalization.
 
 ## Environmentalized key fields
 
@@ -77,7 +83,7 @@ When the default factory API Manager configuration is included in the YAML confi
 
 This issue occurs when the `encrypt` or `change-passphrase` options are used in the `yamles` CLI tool, or when the group passphrase is changed through the `managedomain --change_passphrase` command.
 
-To workaround this, add value,s or a `/null` value, for the missing fields.
+To workaround this, add values or a `/null` value, for the missing fields.
 
 ## Encrypt or change the passphrase of YAML Configuration that contains environmentalized settings
 
