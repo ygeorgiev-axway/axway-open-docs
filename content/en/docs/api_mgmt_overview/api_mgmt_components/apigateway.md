@@ -1,11 +1,10 @@
 {
 "title": "Introduction to API Gateway",
-"linkTitle": "API Gateway",
-"weight":"20",
-"date": "2020-04-14",
-"description": "API Gateway manages, delivers, and secures enterprise APIs, applications, and consumers."
+  "linkTitle": "API Gateway",
+  "weight": "20",
+  "date": "2020-04-14",
+  "description": "API Gateway manages, delivers, and secures enterprise APIs, applications, and consumers."
 }
-
 ## API Gateway is core infrastructure
 
 API Gateway does for APIs what the application server does for applications. This API Gateway role as core application infrastructure is shown as follows:
@@ -16,7 +15,7 @@ The API Gateway can be seen as the API runtime environment, which provides core 
 
 * Security (for example, authentication and authorization)
 * Connectivity with a range of different protocols
-* Virtualization
+* Virtualization (TEST2)
 * Scalability and elasticity
 * High availability
 * Manageability (for example, using API Gateway Manager)
