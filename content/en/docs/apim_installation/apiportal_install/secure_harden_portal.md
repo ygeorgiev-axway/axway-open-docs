@@ -298,11 +298,17 @@ RewriteRule ^ - [R=415,L]
 
 It is best practice to reject requests from HTTP methods that are not being used with the response `405 Method Not Allowed`. For example, allowing requests from the `TRACE` method might result in Cross-Site Tracing (XST) attacks. Similarly, allowing requests from `PUT` and `DELETE` methods might expose vulnerabilities to the file system.
 
+`OPTIONS` method reports which HTTP methods are allowed on the web server, it is mainly used for debugging purposes. If you do not plan to run a diagnostic or debug the server, consider disabling this method.
+
 `GET` and `POST` requests are mandatory for API Portal. You must also allow requests from the HTTP methods your listed APIs support, so users can send requests to them from the Try It page.
 
 Add this configuration in your `.htaccess` or virtual host file. The following example allows only `GET`, `POST`, and `PUT` methods:
 
 ```
+# Disable OPTIONS method
+RewriteCond %{REQUEST_METHOD} ^OPTIONS
+RewriteRule .* - [F]
+
 # Disable TRACE method
 TraceEnable off
 
