@@ -6,15 +6,18 @@
 "description": "Learn how entity types are described in a YAML configuration."
 }
 
-The `_types.yaml` located under the `META-INF` directory of a YAML configuration contains the definition of all the entity types in the Entity Store model. An [entity type](/docs/apigtw_devguide/entity_store/#entity-types) is a description of an entity in the Entity Store.
+The `types` directory located under the `META-INF` directory of a YAML configuration contains the definition of all the entity types in the Entity Store model, and its subdirectories are organized in a hierarchical tree structure that represents the inheritance relationships between types.
 
-The YAML Entity Store supports all entity types but custom types.
+An [entity type](/docs/apigtw_devguide/entity_store/#entity-types) is a description of an entity in the Entity Store.
+
+The YAML Entity Store supports all entity types and custom types.
 
 ## Simple type
 
 ```yaml
 name: JMSSession                       # name used in YAML entity file
 version: 5
+class: com.vordel.dwe.jms.JMSSession
 constants:
   descriptorClass:
     type: string
@@ -52,7 +55,6 @@ components:
   JMSConsumer: '?'                     # an entity of this type JSMSession can have 1 children of type JMSConsumer
 keyFields:
 - name
-class: com.vordel.dwe.jms.JMSSession
 loadorder: 1000100
 ```
 
@@ -62,35 +64,84 @@ loadorder: 1000100
 
 ## Types with inheritance
 
+Consider the following types: `Process`, `JavaProcess` and `NetService`:
+
 ```yaml
 name: Process
 version: 0
-abstract: true                 # abstract means you cannot use it in YAML entity file
-keyFields:
-- name
 fields:
-  name:                        # only field the type
+  name:
     type: string
     defaultValues:
     - {}
     cardinality: 1
-children:
-- name: JavaProcess            # JavaProcess inherits from Process hence its key field "name"
-  version: 0
-  abstract: true
-  children:
-  - name: NetService           # NetService inherits from JavaProcess hence its key field "name"
-    version: 5
-    constants:
-      executableImage:        # this an immutable field user cannot change.
-        type: string
-        value: vshell
-    components:               # NetService is a concrete type, with other fields than "name (key field)
-      LoadableModule: '?'     # It is a container for a LoadableModule or ClassLoader entity
-      ClassLoader: '?'
+keyFields:
+- name
+abstract: true
 ```
 
+```yaml
+name: JavaProcess
+version: 0
+abstract: true
+```
+
+```yaml
+name: NetService
+version: 5
+constants:
+  executableImage:
+    type: string
+    value: vshell
+components:
+  LoadableModule: '?'
+  ClassLoader: '?'
+```
+
+and, the following directory structure:
+
+![types example](/Images/apim_yamles/yamles_types_example.png)
+
+We can say that:
+
+* As `JavaProcess.yaml` file is contained within `Process` directory, then `JavaProcess` is a child type of `Process` type.
+* As `NetService.yaml` file is contained within `JavaProcess` directory, then `NetService` is a child type of `JavaProcess` type.
+
+## Custom types
+
+You can add custom types by creating a YAML file definition of an entity type, and placing the file in the correct subdirectory, under `META-INF/types`.
+
+The following example shows how to create an entity type named `AnotherNetService`:
+
+```yaml
+name: AnotherNetService
+version: 5
+fields:
+  anotherField:
+    type: string
+    defaultValues:
+      - {}
+    cardinality: 1
+constants:
+  executableImage:
+    type: string
+    value: vshell
+components:
+  LoadableModule: '?'
+  ClassLoader: '?'
+```
+
+In the resulting directory structure, `AnotherNetService.yaml` is contained inside the `JavaProcess` directory, meaning that `AnotherNetService` type is a child type of the `JavaProcess` type.
+
+![types example](/Images/apim_yamles/yamles_types_custom_example.png)
+
+When adding a new custom entity type, the parent entity type of your custom type might not yet have any child entity types. In this case, create a new directory named the same as the parent type, without `.yaml` extension, at the same level as the parent type YAML file. Then, add your new custom entity type YAML file in the newly created directory.
+
+YAML files for entity instances of custom types must be placed in the `System` directory. For more information, see [Directory Mapping](/docs/apim_yamles/apim_yamles_references/yamles_top_directories).
+
 ## Cardinality
+
+The following table shows the meaning of cardinality symbol found in `types`:
 
 | Symbol | Min | Max | Mandatory |
 |:------:|:---:|:---:|:---------:|
@@ -98,16 +149,3 @@ children:
 |   +    |  1  |  ∞  |    Yes (if no default value) |
 |   ?    |  0  |  1  |    No     |
 |   *    |  0  |  ∞  |    No     |
-
-## Navigate in _types.yaml
-
-To create a 'NetService' type
-
-* Search for `"name: NetService"`
-* In order to know what fields can can used, move up the type hierarchy.
-* Search for components (note that some can be defined in the ancestor).
-* `NetService` has two components.
-    * Search for `"name: LoadableModule"` and/or for `"name: ClassLoader"`.
-    * Do first steps again to get all required and optional fields for each entity type.
-
-{{% alert color="warning" %}}Despite what is in the model, some fields are said to be mandatory (cardinality=1 and no default value) are not mandatory. Double check with Policy Studio if in doubt.{{% /alert %}}
