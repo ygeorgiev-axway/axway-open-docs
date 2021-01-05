@@ -14,10 +14,6 @@ There is no support for YAML configurations in Policy Studio.
 
 Deployment of YAML configurations via API Gateway Manager web UI is not supported.
 
-## Custom entity types
-
-Custom entity types are not supported in YAML configuration.
-
 ## Team development
 
 * Support of Team development using `yamles import` command, where you must import each project one at a time.

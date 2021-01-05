@@ -11,7 +11,7 @@ This section covers examples of issues that might occurs while using the `valida
 Note that `WARNINGs` will only be listed on `stdout` if there are other `ERRORs`.
 If only `WARNINGs` are found, they are listed in the trace file only.
 
-## DbConnection - initialSize
+## Incorrect value for an `integer` field
 
 **Severity**: ERROR
 
@@ -21,7 +21,7 @@ entity=/External Connections/DB Connections/MySQL/local, type=DbConnection, fiel
 
 Look into the file named `/home/user/yaml/External Connections/DB Connections/MySQL.yaml`. It contains an entity of type DbConnection named `local`, with a field named `initialSize`. Its value is set to `4.5`, and an integer is expected by the model. Fix the field value to be a valid integer.
 
-## DbConnection - maxWait
+## Incorrect value for a `long` field
 
 **Severity**: ERROR
 
@@ -31,7 +31,7 @@ entity=/External Connections/DB Connections/MySQL/local, type=DbConnection, fiel
 
 Look into the file named `/home/user/yaml/External Connections/DB Connections/MySQL.yaml`. It contains an entity of type `DbConnection` named `local`, with a field named `maxWait`. Its value is set to `9999999999999999999999999999999999`, and a `long` is expected by the model. Fix the field value to be an valid `long`. Max long value is `9.223372e+18 2⁶³-1`.
 
-## DbConnection - password
+## Incorrect value for an `encrypted` field
 
 **Severity**: ERROR
 
@@ -86,7 +86,7 @@ fields:
   password: 7ScBASwwV19S+dgmMVbirMxkqGE4bl9nyyvw6nLyzfI=
 ```
 
-## Certificate - content
+## Incorrect value for a Certifcate
 
 **Severity**: ERROR
 
@@ -111,17 +111,17 @@ TZVHO8mvbaG0weyJ9rQPOLXiZNwlz6bb65pcmaHFCN795trV1lpFDMS3wrUU77QR/w4VtfX128a9
 
 Look into the file named `/home/user/yaml/Environment Configuration/Certificate Store/Whatever.yaml`. It contains an entity of type `Certificate`, named `Whatever`, with a field named `content`. Its value is set to a filename that holds the base64 encoded content of your certificate. Check it contains base64 encoded content only.
 
-## FilterCircuit - category
+## Reference field refers to an entity that does not exist
 
 **Severity**: ERROR / WARNING
 
 `entity=/Policies/My policy/Sample policy, type=FilterCircuit, field='category', file=/home/user/yaml/Policies/My policy/Sample policy.yaml, message='Cannot resolve reference: /System/Policy Categories/invalidcategory'`
 
-Look into the file named `/home/user/yaml/Policies/My policy/Sample policy.yaml`. It contains an entity of type `FilterCircuit`, named `Sample Policy`, with a field named `category`, that is pointing to an entity that does not exists in the configuration. Fix the `YamlPk` value in the `category` field to something like `/System/Policy Categories/authentication`. In this case, removing the field would also fix the issue as long as the default value of `/System/Policy Categories/miscellaneous` is what you want.
+Look into the file named `/home/user/yaml/Policies/My policy/Sample policy.yaml`. It contains an entity of type `FilterCircuit`, named `Sample Policy`, with a field named `category`, that is pointing to an entity that does not exists in the configuration. Fix the `YamlPK` value in the `category` field to something like `/System/Policy Categories/authentication`. In this case, removing the field would also fix the issue as long as the default value of `/System/Policy Categories/miscellaneous` is what you want.
 
 If you are validating a configuration project that points to entities that are contained in another project, that will be merged together later. You can use the `--allow-invalid-ref` parameter to downgrade these issues from an ERROR to a WARNING in the trace file. The same message with a severity of WARNING will show in this case.
 
-## GenerateSignatureFilter - signingCert
+## Invalid value for environmentalized certificate reference field
 
 **Severity**: ERROR / WARNING
 
@@ -129,7 +129,7 @@ If you are validating a configuration project that points to entities that are c
 
 Look into the file named `/home/user/yaml/Policies/cert.yaml`. It contains an entity of type `GenerateSignatureFilter`, with a field named `signingCert`, which points to a certificate via a reference that does not exist in the configuration. The reference might be environmentalized using a YamlPK like this: `/Environment Configuration/Certificate Store/{{env "CERT"}}`, which has resulted in the "invalid field" in the error message. This issue occurs when you try to validate an environment where the system environment variable `CERT` does not exist. To avoid errors, use the `--allow-invalid-ref` option, or set a dummy value for the environment variable `CERT` in the validating environment.
 
-## FilterCircuit - wrong type
+## Reference field refers to an entity of the wrong type
 
 **Severity**: ERROR
 
@@ -137,7 +137,7 @@ Look into the file named `/home/user/yaml/Policies/cert.yaml`. It contains an en
 
 Look into the file named `/home/user/yaml/Policies/My policy/Sample policy.yaml`. It contains an entity of type `FilterCircuit`, named `Sample Policy`, with a field named `category`, which points to an entity that exists in the configuration but is of the wrong type. It is pointing to an entity of type `IPFilter`, but it needs an entity of type `PolicyCategory`. Fix the YamlPk value in the field `category` to something like `/System/Policy Categories/authentication`. In this case, removing the field would also fix the issue as long as the default value of `/System/Policy Categories/miscellaneous` is what you want.
 
-## IpFilter - missing field
+## Missing required field
 
 **Severity**: ERROR
 
@@ -222,7 +222,7 @@ As the `*` character needs to be contained within double quotation. Refer to the
 
 You might see this in the `yamles` trace file at validation time because the validation environment does not have the environment variable `MY_ENV_VARIABLE` defined. This is not a problem. The environment variable `MY_ENV_VARIABLE` only needs to be defined in the runtime environment where the API Gateway is running. If you see this at deployment time in the API Gateway trace, create the environment variable in the API Gateway's environment and restart the API Gateway.
 
-## DbConnection - setPoolPreparedStatements
+## Invalid value for `boolean` field
 
 **Severity**: WARNING
 
@@ -230,26 +230,16 @@ You might see this in the `yamles` trace file at validation time because the val
 
 Look into the file named `/home/user/yaml/External Connections/DB Connections/MySQL.yaml`. It contains an entity of type `DbConnection`, named `local`, with a field named `setPoolPreparedStatements`. Its value is set to `truex`, but a boolean is expected by the model. Fix the field value to be an valid boolean (`true` or `false`). The value defaults to `false`.
 
-## Entities of different types at same level with same PK for parent PK
+## Entities of different types at same level with same PK
 
 **Severity**: WARNING
 
 ```
-WARNING: Found entities of different types at same level with same PK for parent PK :'/Server Settings/Logging Configuration' PK end with: (XMLRollOverLogger)Text Rollover File Logger
-WARNING: Found entities of different types at same level with same PK for parent PK :'/Server Settings/Logging Configuration' PK end with: (TextRollOverLogger)Text Rollover File Logger
+WARNING: Found entities of different types at same level with same PK for parent PK :'/Path/to/parent' PK end with: (EntityTypeA)MyEntityName
+WARNING: Found entities of different types at same level with same PK for parent PK :'/Path/to/parent' PK end with: (EntityTypeB)MyEntityName
 ```
 
-This is generated at conversion time using the `fed2yaml` option. To fix after converting, edit the `/Server Settings/Logging Configuration(XmlRollOverLogger)Text Rollover File Logger.yaml` file and set the name to `XML Rollover File Logger`.
-
-```yaml
----
-type: XMLRollOverLogger
-fields:
-  format: ${level} ${timestamp} ${id} '${text}' ${filterType} ${filterName}
-  name: XML Rollover File Logger
-```
-
-The fix is optional.
+These errors could be generated at conversion time using the `fed2yaml` or `frag2yaml` options if the original XML has entities of different types at the same level with the same PK. To fix after converting, edit the YAML files so that the entities have different values for their key field(s). In general this means editing the `name` field if `name` is the only key field for the entity, and the YAML file name.
 
 ## Filter with same name
 
