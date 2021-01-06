@@ -130,7 +130,10 @@ Add security headers to the `apiportal.conf` file (located in `/etc/httpd/conf.d
 In the virtual host directive add the following:
 
 ```
-Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure;SameSite=Strict
+Header edit Set-Cookie "(?i)^((?:(?!;\s?HttpOnly).)+)$" "$1; HttpOnly"
+Header edit Set-Cookie "(?i)^((?:(?!;\s?Secure).)+)$" "$1; Secure"
+Header edit Set-Cookie "(?i)^((?:(?!;\s?SameSite=Strict).)+)$" "$1; SameSite=Strict"
+Header unset X-Frame-Options
 Header always append X-Frame-Options SAMEORIGIN
 Header set X-XSS-Protection "1; mode=block"
 Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains;"
@@ -174,17 +177,18 @@ Update the file with the following options:
 
 ```
 - expose_php = 0
-- display_errors = 0
-- disable_functions = exec,passthru,shell_exec,system
-- allow_url_include = 0
+- display_errors = Off
+- disable_functions = "passthru,shell_exec,system"
+- allow_url_include = Off
 - session.cookie_httponly = 1
 - session.cookie_secure = On
+- session.cookie_samesite = "Strict"
 - open_basedir = “/opt/axway/apiportal/htdoc:/tmp”
 ```
 
-You should only set `session.cookie_secure` to `On` if you have configured SSL.
+You should only set session.cookie_secure to `On` if you have configured SSL.
 
-Set `open_basedir` to a list of directories (use `:` to separate directories):
+The `open_basedir` option must be added after the installation is finished. Set `open_basedir` to a list of directories (use `:` to separate directories):
 
 * API Portal root directory
 * Value of `upload_tmp_dir` or `/tmp` if it is empty
