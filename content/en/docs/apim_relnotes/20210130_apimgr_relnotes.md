@@ -16,9 +16,14 @@ Docker deployment is supported on Linux. For a summary of the system requirement
 
 The following new features and enhancements are available in this update.
 
-### placeholder
+### Option to disable SSL renegotiation is added for HTTPS listeners and Connection filters
 
-placeholder
+We have added a new option, **Disable renegotiation in TLSv1.2 and earlier**, in Policy Studio to allow you to disable SSL renegotiation when configuring HTTPS interfaces or connecting to URL filters. This option is enabled by default, meaning that renegotiation is not allowed, and listeners do not send HelloRequest messages, and they ignore renegotiation requests via ClientHello.
+
+For more information, see:
+
+* [Configure Advanced SSL settings](/docs/apim_policydev/apigw_gw_instances/general_services/#configure-advanced-ssl-settings)
+* [Connect to URL filter](/docs/apim_policydev/apigw_polref/routing_common/)
 
 ## Important changes
 
