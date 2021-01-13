@@ -128,7 +128,7 @@ To create the new data source, perform the following steps:
 2. Select the collection **Data Sources** tab.
 3. Click **Add > Add File** at the bottom right.
 
-   ![KPS collection Data Sources tab](/Images/APIGatewayKPSUserGuide/backupcollection.png)
+   ![KPS collection Data Sources tab](/Images/APIGatewayKPSUserGuide/kpscollections.png)
 4. Enter a file data source **Name** and **Description**.
 5. Enter a **Directory Path** (for example, `${VINSTDIR/kps/samples`).
 
