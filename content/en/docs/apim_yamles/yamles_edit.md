@@ -34,9 +34,9 @@ This section covers the steps required to add a new certificate and private key 
 
 Note that certificates and private keys that exist in the XML federated configuration, which then get converted to YAML format, will be formatted as required with no additional steps required. In some cases, you might only need to add a new certificate to the YAML configuration, in this case the steps for the private key can be ignored.
 
-1. You must have a certificate in a `PEM` file and its related private key in separate `DER` file, for example, `Axway-cert.pem` and `Axway-key.der`. The private key should be unencrypted.
+1. You must have a certificate in a `PEM` file and its related private key in a separate `PEM` file. For example, `Axway-cert.pem` and `Axway-key.pem`. The private key cannot be encrypted with OpenSSL, as it is not supported.
 
-2. For testing purposes, you can generate an unencrypted private key and self-signed certificate PEM files using openssl as follows:
+2. For testing purposes, you can generate an unencrypted private key and a self-signed certificate PEM files using OpenSSL as follows:
 
     ```
     > openssl req -nodes -new -x509 -keyout Axway-key.pem -out Axway-cert.pem
@@ -61,58 +61,20 @@ Note that certificates and private keys that exist in the XML federated configur
     Email Address []:axway@axway.com
     ```
 
-3. Convert the `Axway-key.pem` to an `Axway-key.der`:
+3. Copy the `Axway-cert.pem` and `Axway-key.pem` files into the `/Environment Configuration/Certificate Store` directory in your YAML entity store.
 
-    ```
-    openssl pkcs8 -topk8 -inform PEM -outform DER -in Axway-key.pem -out Axway-key.der -nocrypt
-    ```
-
-4. Copy the `Axway-cert.pem` and `Axway-key.der` files into the `/Environment Configuration/Certificate Store` directory in your YAML entity store.
-
-5. Edit the `Axway-cert.pem` file, remove the header and footer lines and leave only the base64 content. This is to allow the file to be loaded by the YAML entity store. Remove the following lines from `/Environment Configuration/Certificate Store/Axway-cert.pem`:
-
-    ```
-    -----BEGIN CERTIFICATE-----
-    -----END CERTIFICATE-----
-    ```
-
-    The remaining file content will look like this:
-
-    ```
-    MIIDnTCCAoWgAwIBAgIUW3ChbRS4eInQE0rgqp3YkBHZBXIwDQYJKoZIhvcNAQEL
-    BQAwXjELMAkGA1UEBhMCSUUxDzANBgNVBAgMBkR1YmxpbjEOMAwGA1UECgwFQXh3
-    YXkxDjAMBgNVBAMMBUF4d2F5MR4wHAYJKoZIhvcNAQkBFg9heHdheUBheHdheS5j
-    b20wHhcNMjAwOTE2MDk1MTM2WhcNMjAxMDE2MDk1MTM2WjBeMQswCQYDVQQGEwJJ
-    RTEPMA0GA1UECAwGRHVibGluMQ4wDAYDVQQKDAVBeHdheTEOMAwGA1UEAwwFQXh3
-    YXkxHjAcBgkqhkiG9w0BCQEWD2F4d2F5QGF4d2F5LmNvbTCCASIwDQYJKoZIhvcN
-    AQEBBQADggEPADCCAQoCggEBAL0l1qotIi2GdkEpevbNtoy3oDKozzz6n9aN2eae
-    aaqxqNtXCx2n0upFh4Ey3DWPd72HwKG0pvK39cZNpfos1Rb15l173slx8zwfMNQ8
-    NVvjOt3OIuGjPL+Pjb/ihG+dLGcKI/GTG7E/DsVgUhQ2Cu/rGVfdrwcvmhbUdLjq
-    uZNlovbnCvJcSUmsQUIbWBEtI4bTmCK4ma0UxMi5rExNOM+HQscNkr75RqgkgB5U
-    QSrEXyh8UzRz7oSqpaKcWtYQzbw5OhMq8WhL2+Zj2s8M2I0vzvlqi2dbv/gc3eWy
-    /7MC1ZuZikO5EBbmeoMB57GBnS8UexjJtcZ373t9IdWqjEUCAwEAAaNTMFEwHQYD
-    VR0OBBYEFCZYaBqwqQtHTcPNJqsRkQs2d7A4MB8GA1UdIwQYMBaAFCZYaBqwqQtH
-    TcPNJqsRkQs2d7A4MA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEB
-    AFQStTP3jB6Y2hKLxsSvtESqgsGOUUWwhqrXu5ee8ff1ZuiRhgkFhkQ9PF8gkJ81
-    G4BdWP2V8c23OPCNSi0AMjyXKxeH8uqgvfByI9fxKNpQlhM/bgHm77KDBjymPTiF
-    YNDhF1B120AZxLlO9GqVwjSpNSipswjNZezVoOQZLuO9FYQG2l2VhwY6/OAfLwAv
-    nZK3sWVKAPb7yXgahYLkHvpTc3YkQIBAvApkSOYUmvoaosf9nvBIYUizVajdGNuN
-    paRQIpiNy+JF67qBlJWsvdipyMHYyWyyaD/llI1X+QRLhbCiTsTXuanVFuxNEIBz
-    73nMdCLFLS8zBgflu6bajI4=
-    ```
-
-6. Create the `/Environment Configuration/Certificate Store/Axway.yaml` file in your YAML entity store:
+4. Create the `/Environment Configuration/Certificate Store/Axway.yaml` file in your YAML entity store:
 
     ```yaml
     ---
     type: Certificate
     fields:
       dname: Axway
-      key#refbinary: Axway-key.der
-      content#ref: Axway-cert.pem
+      key: '{{file "Axway-key.pem" "pem"}}'
+      content: '{{file "Axway-cert.pem" "pem"}}'
     ```
 
-7. Edit another entity that requires a certificate and private key, for example an `XML Signature filter` (see the `signingCert` field in the following example). It now points to the new certificate and private key via its YamlPK `/Environment Configuration/Certificate Store/Axway`.
+5. Edit another entity that requires a certificate and private key, for example, an `XML Signature filter` (see the `signingCert` field in the following example). It now points to the new certificate and private key via its YamlPK `/Environment Configuration/Certificate Store/Axway`.
 
     ```yaml
     ---
@@ -148,17 +110,19 @@ Note that certificates and private keys that exist in the XML federated configur
           certAttachmentId: ""
     ```
 
-If the YAML configuration you are adding the certificate and private key into is encrypted with a passphrase, you will need to encrypt the private key file. To encrypt the private key file `Axway-key.der`, execute all the previous steps and complete the procedure with the following:
+If the YAML configuration you are adding the certificate and private key into is encrypted with a passphrase, you will need to encrypt the private key file. To encrypt the private key file `Axway-key.pem`, execute all the previous steps and also perform the following:
 
 ```shell
 cd apigateway/posix/bin
-./yamles encrypt --file ~/yaml/Environment\ Configuration/Certificate\ Store/Axway-key.der --passphrase changeme
-The file `/home/user/yaml/Environment Configuration/Certificate Store/Axway-key.der` has been encrypted
+./yamles encrypt --file ~/yaml/Environment\ Configuration/Certificate\ Store/Axway-key.pem --source /home/user/yaml --passphrase changeme
+The file `/home/user/yaml/Environment Configuration/Certificate Store/Axway-key.pem` has been encrypted
 ```
 
-After you complete on the YAML configuration, create a `.tar.gz` file and deploy it to your running API Gateway.
+The YAML configuration referenced in the `--source` parameter of the `encrypt` command must be the destination YAML configuration to ensure it is encrypted correctly.
 
-{{< alert title="Note">}}Encrypting a private key via `openssl` and adding it to the YAML configuration is not supported. You must do this before packaging the `.tar.gz` and deploying to a gateway group that has a matching passphrase.{{< /alert >}}
+After you complete editing the YAML configuration, create a `.tar.gz` file and deploy it to your running API Gateway. Your API Gateway group must use the same encryption passphrase.
+
+{{< alert title="Note">}}Encrypting a private key via `openssl` and adding it to the YAML configuration is not supported.{{< /alert >}}
 
 ## Manually create an entity instance YAML file
 
@@ -169,12 +133,12 @@ To create an entity instance of `NetService` type:
 
 * Search for YAML file `NetService.yaml` within the `META-INF/types` directory.
 * To know what fields can be used, move up to the ancestor types:
-    * `NetService.yaml` is contained within `JavaProcess` directory. Check fields within YAML entity type file `JavaProcess.yaml`.
-    * `JavaProcess.yaml` is contained within `Process` directory. Check fields within YAML entity type file `Process.yaml`.
+    * `NetService.yaml` is contained within `JavaProcess` directory. Check the fields within YAML entity type file `JavaProcess.yaml`.
+    * `JavaProcess.yaml` is contained within `Process` directory. Check the fields within YAML entity type file `Process.yaml`.
     * Continue until reaching the root directory `Entity`.
-* Search for components. Use the same approach you've used to search for fields).
+* Search for components. Use the same approach you have used to search for fields.
 * `NetService` has two components: `LoadableModule` and `ClassLoader`.
-    * Search for `LoadableModule.yaml` and for `ClassLoader.yaml` YAML files within the `META-INF/types` directory.
+    * Search for `LoadableModule.yaml` and `ClassLoader.yaml` YAML files within the `META-INF/types` directory.
     * Execute the first steps again to get all required and optional fields for each entity type.
 
 If the entity instance you have created is a [container entity](/docs/apim_yamles/yamles_structure#_parentyaml), create a new directory named like the new entity instance. Create a YAML file named `_parent.yaml`, and put in within the created directory.
@@ -188,7 +152,7 @@ fields:
 
 ![new container entity](/Images/apim_yamles/yamles_new_container_entity.png)
 
-If the entity instance you have created is not a container entity, create a YAML file named like the field *name*. Put it within the correct directory:
+If the entity instance you have created is not a container entity, create a YAML file named like the field *name*, and add it to the correct directory:
 
 ```yaml
 ---
@@ -200,4 +164,4 @@ fields:
 
 ![new entity](/Images/apim_yamles/yamles_new_entity.png)
 
-Despite what is in the model, some fields that are said to be mandatory (cardinality=1 and no default value) are not mandatory. Double check with Policy Studio when in doubt.
+Despite what is in the model, some fields that are said to be mandatory (cardinality=1 and no default value) are not mandatory. Required fields and default values can be checked in Policy Studio on an XML-based project by creating the same type of entity and observing what is allowed and created by default.
