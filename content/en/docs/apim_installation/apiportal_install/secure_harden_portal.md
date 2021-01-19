@@ -132,7 +132,6 @@ In the virtual host directive add the following:
 ```
 Header edit Set-Cookie "(?i)^((?:(?!;\s?HttpOnly).)+)$" "$1; HttpOnly"
 Header edit Set-Cookie "(?i)^((?:(?!;\s?Secure).)+)$" "$1; Secure"
-Header edit Set-Cookie "(?i)^((?:(?!;\s?SameSite=Strict).)+)$" "$1; SameSite=Strict"
 Header unset X-Frame-Options
 Header always append X-Frame-Options SAMEORIGIN
 Header set X-XSS-Protection "1; mode=block"
@@ -140,6 +139,16 @@ Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains
 Header set X-Content-Type-Options nosniff
 Header set Referrer-Policy "same-origin"
 ```
+
+{{< alert title="Note" color="" >}}`SameSite` attribute is not compatible with SSO.
+
+If you are not using SSO, we recommend you to add `SameSite` to the host directive so that the cookies are sent only in First-Party (API Portal) context, and not along with requests initiated by Third-Party websites.
+
+```
+`Header edit Set-Cookie "(?i)^((?:(?!;\s?SameSite=Strict).)+)$" "$1; SameSite=Strict"`
+```
+
+{{< /alert >}}
 
 You should only use the HSTS header if you have configured SSL.
 
