@@ -4,7 +4,6 @@ linkTitle: API Portal January 2021
 weight: 100
 date: 2021-01-06
 ---
-
 ## Summary
 
 API Portal provides an API consumer-facing interface that you can customize to match your corporate brand. API Portal is a layered product linked to API Manager, and requires both API Manager and API Gateway. For more information, see the API Gateway and API Manager documentation.
@@ -15,7 +14,8 @@ API Portal is available as a software installation or a virtualized deployment i
 
 * If you are installing API Portal for the first time using this update, see [Install API Portal](/docs/apim_installation/apiportal_install/)
 * If you are already using API Portal (7.5.x, 7.6.x, 7.7.x) and want to install this update, see [Upgrade API Portal](/docs/apim_installation/apiportal_install/upgrade_automatic/)
-* If you want to deploy API Portal in Docker containers, see [Deploy API Portal in containers](/docs/apim_installation/apiportal_docker/)
+* If you want to deploy API Portal in Docker containers, see [Deploy API Portal in containers](/docs/apim_installation/apiportal_docker/docker_portal_upgrade/)
+* If you are already using API Portal in Docker containers and you want to install this update, see [Upgrade API Portal in Docker containers](/docs/apim_installation/apiportal_docker/docker_portal_upgrade/)
 
 ## New features and enhancements
 
@@ -27,10 +27,10 @@ placeholder
 
 This update has the following limitations:
 
-* API Portal 7.7.20201130 is compatible with API Gateway and API Manager 7.7.20201130 only.
-* Upgrade to API Portal 7.7.20201130 is supported from [API Portal 7.7](/docs/apim_relnotes/201904_release/apip_relnotes/) only. You can use the [cumulative upgrade script](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-api-portal-using-the-cumulative-upgrade-script) to upgrade directly from earlier versions (for example, 7.5.5, 7.6.2) to API Portal 7.7 November, or see [API Portal single version upgrade](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-from-api-portal-7-6-2) to upgrade versions incrementally.
-* Upgrading from previous API Portal Docker image is not supported.
-* This update is not available as a virtual appliance or as a managed service on Axway Cloud.
+* API Portal 7.7.20210130 is compatible with API Gateway and API Manager 7.7.20210130 only.
+* To upgrade from earlier versions (for example, 7.5.5, 7.6.2) you must first upgrade to API Portal 7.7. For more information see [API Portal single version upgrade](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-from-api-portal-7-6-2) to upgrade versions incrementally.
+* You can use the [cumulative upgrade script](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-api-portal-using-the-cumulative-upgrade-script) to upgrade directly from earlier versions (for example, 7.5.5, 7.6.2) to API Portal [7.7 November](/docs/apim_relnotes/20201130_apip_relnotes/), then apply this update package to update your API Portal to the January 21 release.
+* This update is not available as a virtual appliance or as a managed service on Axway Cloud. **TBD if we still need it**.
 
 ## Important changes
 
@@ -41,8 +41,6 @@ There are no major changes in this update.
 No capabilities have been deprecated in this update.
 
 ## Removed features
-
-### Enable user listing configuration
 
 No capabilities have been removed in this update.
 
@@ -57,11 +55,25 @@ This version of API Portal includes:
 
 ### Fixed security vulnerabilities
 
-placeholder
+| **Internal ID** | **Case ID** | **CVE Identifier** | **Description**                |
+| --------------- | ----------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IAP-3173        |             |                    | **Issue**: `HTTP OPTIONS` method is enabled by default. **Resolution**: Documentation "[Allow requests from only used HTTP methods](/docs/apim_installation/apiportal_install/secure_harden_portal/#allow-requests-from-only-used-http-methods)" was updated with instructions on how to disable `HTTP OPTIONS` method.                                                                                       |
+| IAP-3174        |             |                    | **Issue**: The HTTP response 'Contains duplicate attributes for `Set-Cookie header` and `X-Frame-Options header`' was showing several times. **Resolution**: Duplication of the `X-Frame-Options header` and of the cookie attributes are prevented now. Documentation "[Update apiportal.conf](/docs/apim_installation/apiportal_install/secure_harden_portal/#update-apiportalconf)" is updated accordingly. |
+| IAP-3784        | 1215016     |                    | **Issue**: Arbitrary redirection on sign-in page was exploitable. **Resolution**: The issue has been fixed as now API Portal checks if the host of the encoded return url is the same as the API Portal's host.       |
+| IAP-3757        | 1212990     |                    | **Issue**: Sensitive directories accessible through web. **Resolution**: `htaccess` file modification done to block sensitive directory access.                                                                    |
+| IAP-3745        | 1212603     |                    | **Issue**: XSS was possible on API details page while creating an application. **Resolution**: The XSS is remediated on API details page for `apiId` parameter.                                                         |
+| IAP-3846        |             |                    | **Issue**: Private key file is publicly available via url. **Resolution**: `htaccess` modification done to block sensitive data access.                                                                                 |
 
 ### Other fixed issues
 
-placeholder
+| **Internal ID** | **Case ID** | **Description**                                            |
+| --------------- | ----------- | ------------------------------------------------ |
+| IAP-3732        |             | **Issue**: Informative messages where not logged in a log file when password was reset. **Resolution**: Informative messages where not logged in a `com_apiportal.error.log` file.                                                                                               |
+| IAP-3776        |             | **Issue**: JavaScript error is shown in console when submitting login form. **Resolution**: `components/com_apiportal/assets/js/apiportal.js` loaded in login page.                                                                                                               |
+| IAP-3887        | 1220931     | **Issue**: Installation fails when installed with MySQL lower than 5.7. **Resolution**: `UTF8 COLLATE` was added to docker file in order to support MySQL lower than 5.7.                                                                                                         |
+| IAP-3889        | 1221136     | **Issue**: The documentation describing secure PHP configuration have mistakes and not valid options. **Resolution**: The documentation has been updated following best security practices applicable to API Portal.                                                              |
+| IAP-3911        |             | **Issue**: Apache virtual host configuration was not correctly set when installing API Portal using plain HTTP, and as a result, API Portal cannot be loaded. **Resolution**: Now Apache virtual host configuration is correct and API Portal is able to install using plain HTTP. |
+| IAP-3875        | 1203778     | **Issue**: IPs are logged hashed when session hijack attempt happens. **Resolution**: IPs are logged without being hashed when session hijack attempt happens. |
 
 ## Known issues
 
@@ -69,7 +81,7 @@ The following are known issues for this update.
 
 ### When Multi Manager feature is configured, API Portal users are no longer able to login
 
-After a recent bug fix in API Manager (RDAPI-20021), the `Authenticate to Master` policy is no longer working in releases earlier than [API Portal July 2020](/docs/apim_relnotes/20200730_apip_relnotes/). To fix this, perform the following steps:
+After a recent bug fix in API Manager (RDAPI-20021), the `Authenticate to Master` policy is no longer working after upgrading from releases earlier than [API Portal July 2020](/docs/apim_relnotes/20200730_apip_relnotes/). To fix this, perform the following steps:
 
 1. Open all slave managers configurations in Policy Studio, and click to **Edit** the `AuthenticateToMaster` policy.
 2. Click the **Login to Master** (Connect to URL) filter, and enter `Accept: */*` for the **Request Protocol Header**.
