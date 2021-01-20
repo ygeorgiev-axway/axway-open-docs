@@ -177,7 +177,7 @@ Restart Apache after modifying the `apiportal.conf` and `security.conf` files.
 Find the location of your `php.ini` file. For example, run the command:
 
 ```
-php –i | grep php.ini
+php -i | grep php.ini
 ```
 
 In the resulting list of files, the `php.ini` listed as the `Loaded Configuration File` is the correct file to edit.
@@ -192,10 +192,10 @@ Update the file with the following options:
 - session.cookie_httponly = 1
 - session.cookie_secure = On
 - session.cookie_samesite = "Strict"
-- open_basedir = “/opt/axway/apiportal/htdoc:/tmp”
+- open_basedir = "/opt/axway/apiportal/htdoc:/tmp"
 ```
 
-You should only set session.cookie_secure to `On` if you have configured SSL.
+You should only set `session.cookie_secure` to `On` if you have configured SSL.
 
 The `open_basedir` option must be added after the installation is finished. Set `open_basedir` to a list of directories (use `:` to separate directories):
 
