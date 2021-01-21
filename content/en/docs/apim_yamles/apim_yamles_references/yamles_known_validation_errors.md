@@ -11,7 +11,7 @@ This section covers examples of issues that might occurs while using the `valida
 Note that `WARNINGs` will only be listed on `stdout` if there are other `ERRORs`.
 If only `WARNINGs` are found, they are listed in the trace file only.
 
-## Incorrect value for an `integer` field
+## Incorrect value for an integer field
 
 **Severity**: ERROR
 
@@ -21,7 +21,7 @@ entity=/External Connections/DB Connections/MySQL/local, type=DbConnection, fiel
 
 Look into the file named `/home/user/yaml/External Connections/DB Connections/MySQL.yaml`. It contains an entity of type DbConnection named `local`, with a field named `initialSize`. Its value is set to `4.5`, and an integer is expected by the model. Fix the field value to be a valid integer.
 
-## Incorrect value for a `long` field
+## Incorrect value for a long field
 
 **Severity**: ERROR
 
@@ -31,7 +31,7 @@ entity=/External Connections/DB Connections/MySQL/local, type=DbConnection, fiel
 
 Look into the file named `/home/user/yaml/External Connections/DB Connections/MySQL.yaml`. It contains an entity of type `DbConnection` named `local`, with a field named `maxWait`. Its value is set to `9999999999999999999999999999999999`, and a `long` is expected by the model. Fix the field value to be an valid `long`. Max long value is `9.223372e+18 2⁶³-1`.
 
-## Incorrect value for an `encrypted` field
+## Incorrect value for an encrypted field
 
 **Severity**: ERROR
 
@@ -86,7 +86,7 @@ fields:
   password: 7ScBASwwV19S+dgmMVbirMxkqGE4bl9nyyvw6nLyzfI=
 ```
 
-## Incorrect value for a Certifcate
+## Incorrect value for a certificate
 
 **Severity**: ERROR
 
@@ -120,6 +120,16 @@ Look into the file named `/home/user/yaml/Environment Configuration/Certificate 
 Look into the file named `/home/user/yaml/Policies/My policy/Sample policy.yaml`. It contains an entity of type `FilterCircuit`, named `Sample Policy`, with a field named `category`, that is pointing to an entity that does not exists in the configuration. Fix the `YamlPK` value in the `category` field to something like `/System/Policy Categories/authentication`. In this case, removing the field would also fix the issue as long as the default value of `/System/Policy Categories/miscellaneous` is what you want.
 
 If you are validating a configuration project that points to entities that are contained in another project, that will be merged together later. You can use the `--allow-invalid-ref` parameter to downgrade these issues from an ERROR to a WARNING in the trace file. The same message with a severity of WARNING will show in this case.
+
+## Reference field refers to a selector
+
+**Severity**: WARNING
+
+`entity=/Environment Configuration/Services/5555, type=SSLInterface, field='serverCert', file=/home/user/yaml/Environment Configuration/Services/5555.yaml, message='${env.SSL.CERT} is used as a reference. Make sure envSettings.props or system.properties is populated accordingly'`
+
+A shorthand key must be set in `envSettings.props` for `env.SSL.CERT`, for example, `env.SSL.CERT=/[Certificates]name=Certificate Store/[Certificate]dname=O=listener\,CN=localhost`, for the gateway to pick up the certificate at startup. If a selector starts with `${system.`, you must add a setting to the `system.properties` file.
+
+This allows users to environmentalize a certificate for a given instance rather than for the entire API Gateway group which shares the same configuration.
 
 ## Invalid value for environmentalized certificate reference field
 
@@ -222,7 +232,7 @@ As the `*` character needs to be contained within double quotation. Refer to the
 
 You might see this in the `yamles` trace file at validation time because the validation environment does not have the environment variable `MY_ENV_VARIABLE` defined. This is not a problem. The environment variable `MY_ENV_VARIABLE` only needs to be defined in the runtime environment where the API Gateway is running. If you see this at deployment time in the API Gateway trace, create the environment variable in the API Gateway's environment and restart the API Gateway.
 
-## Invalid value for `boolean` field
+## Invalid value for boolean field
 
 **Severity**: WARNING
 
