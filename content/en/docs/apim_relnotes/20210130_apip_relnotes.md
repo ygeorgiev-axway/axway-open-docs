@@ -19,9 +19,7 @@ API Portal is available as a software installation or a virtualized deployment i
 
 ## New features and enhancements
 
-### placeholder
-
-placeholder
+No new features were added in this update.
 
 ## Limitations of this update
 
@@ -30,7 +28,7 @@ This update has the following limitations:
 * API Portal 7.7.20210130 is compatible with API Gateway and API Manager 7.7.20210130 only.
 * To upgrade from earlier versions (for example, 7.5.5, 7.6.2) you must first upgrade to API Portal 7.7. For more information see [API Portal single version upgrade](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-from-api-portal-7-6-2) to upgrade versions incrementally.
 * You can use the [cumulative upgrade script](/docs/apim_installation/apiportal_install/upgrade_automatic/#upgrade-api-portal-using-the-cumulative-upgrade-script) to upgrade directly from earlier versions (for example, 7.5.5, 7.6.2) to API Portal [7.7 November](/docs/apim_relnotes/20201130_apip_relnotes/), then apply this update package to update your API Portal to the January 21 release.
-* This update is not available as a virtual appliance or as a managed service on Axway Cloud. **TBD if we still need it**.
+* This update is not available as a virtual appliance or as a managed service on Axway Cloud.
 
 ## Important changes
 
@@ -55,25 +53,25 @@ This version of API Portal includes:
 
 ### Fixed security vulnerabilities
 
-| **Internal ID** | **Case ID** | **CVE Identifier** | **Description**                |
-| --------------- | ----------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| IAP-3173        |             |                    | **Issue**: `HTTP OPTIONS` method is enabled by default. **Resolution**: Documentation "[Allow requests from only used HTTP methods](/docs/apim_installation/apiportal_install/secure_harden_portal/#allow-requests-from-only-used-http-methods)" was updated with instructions on how to disable `HTTP OPTIONS` method.                                                                                       |
-| IAP-3174        |             |                    | **Issue**: The HTTP response 'Contains duplicate attributes for `Set-Cookie header` and `X-Frame-Options header`' was showing several times. **Resolution**: Duplication of the `X-Frame-Options header` and of the cookie attributes are prevented now. Documentation "[Update apiportal.conf](/docs/apim_installation/apiportal_install/secure_harden_portal/#update-apiportalconf)" is updated accordingly. |
-| IAP-3784        | 1215016     |                    | **Issue**: Arbitrary redirection on sign-in page was exploitable. **Resolution**: The issue has been fixed as now API Portal checks if the host of the encoded return url is the same as the API Portal's host.       |
-| IAP-3757        | 1212990     |                    | **Issue**: Sensitive directories accessible through web. **Resolution**: `htaccess` file modification done to block sensitive directory access.                                                                    |
-| IAP-3745        | 1212603     |                    | **Issue**: XSS was possible on API details page while creating an application. **Resolution**: The XSS is remediated on API details page for `apiId` parameter.                                                         |
-| IAP-3846        |             |                    | **Issue**: Private key file is publicly available via url. **Resolution**: `htaccess` modification done to block sensitive data access.                                                                                 |
+| **Internal ID** | **Case ID** | **CVE Identifier** | **Description**                                                                                                                                                                                                                                                                                                                                                                                               |
+| --------------- | ----------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IAP-3173        |             |                    | **Issue**: `HTTP OPTIONS` method is enabled by default. **Resolution**: The documentation for "[Allow requests from only used HTTP methods](/docs/apim_installation/apiportal_install/secure_harden_portal/#allow-requests-from-only-used-http-methods)" was updated with instruction how to disable `HTTP OPTIONS` method.                                                                                       |
+| IAP-3174        |             |                    | **Issue**: The HTTP response contains duplicate attributes for `Set-Cookie header` and `X-Frame-Options header` was shown several times. **Resolution**: Duplication of the `X-Frame-Options header` and of the cookie attributes are prevented now. The documentation for "[Update apiportal.conf](/docs/apim_installation/apiportal_install/secure_harden_portal/#update-apiportalconf)" is updated accordingly. |
+| IAP-3784        | 1215016     |                    | **Issue**: Arbitrary redirection on sign-in page was exploitable. **Resolution**: The issue has been fixed as now API Portal checks if the host of the encoded return url is the same as the API Portal's host.                                                                                                                                                                                               |
+| IAP-3757        | 1212990     |                    | **Issue**: Sensitive directories accessible through web. **Resolution**: htaccess file modification done to block sensitive directory access.                                                                                                                                                                                                                                                                 |
+| IAP-3745        | 1212603     |                    | **Issue**: XSS was possible on API Details page while creating an application. **Resolution**: The XSS is remediated on API Details page for `apiId` parameter.                                                                                                                                                                                                                                                 |
+| IAP-3846        |             |                    | **Issue**: Private key file is publicly available via URL. **Resolution**: `htaccess` modification done to block sensitive data access. See the [API Portal private key accessible through web](https://support.axway.com/en/articles/article-details/id/181367) article to learn how to manually apply the fix.      |
 
 ### Other fixed issues
 
-| **Internal ID** | **Case ID** | **Description**                                            |
-| --------------- | ----------- | ------------------------------------------------ |
+| **Internal ID** | **Case ID** | **Description**                                                                                                                                                                                                                                                                   |
+| --------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | IAP-3732        |             | **Issue**: Informative messages where not logged in a log file when password was reset. **Resolution**: Informative messages where not logged in a `com_apiportal.error.log` file.                                                                                               |
 | IAP-3776        |             | **Issue**: JavaScript error is shown in console when submitting login form. **Resolution**: `components/com_apiportal/assets/js/apiportal.js` loaded in login page.                                                                                                               |
 | IAP-3887        | 1220931     | **Issue**: Installation fails when installed with MySQL lower than 5.7. **Resolution**: `UTF8 COLLATE` was added to docker file in order to support MySQL lower than 5.7.                                                                                                         |
 | IAP-3889        | 1221136     | **Issue**: The documentation describing secure PHP configuration have mistakes and not valid options. **Resolution**: The documentation has been updated following best security practices applicable to API Portal.                                                              |
-| IAP-3911        |             | **Issue**: Apache virtual host configuration was not correctly set when installing API Portal using plain HTTP, and as a result, API Portal cannot be loaded. **Resolution**: Now Apache virtual host configuration is correct and API Portal is able to install using plain HTTP. |
-| IAP-3875        | 1203778     | **Issue**: IPs are logged hashed when session hijack attempt happens. **Resolution**: IPs are logged without being hashed when session hijack attempt happens. |
+| IAP-3911        |             | **Issue**: Apache virtual host configuration was not correctly set when installing API Portal using plain HTTP and as a result API Portal cannot be loaded. **Resolution**: Now Apache virtual host configuration is correct and API Portal is able to install using plain HTTP. |
+| IAP-3875        | 1203778     | **Issue**: IPs are logged hashed when session hijack attempt happens. **Resolution**: IPs will be logged without being hashed when session hijack attempt happens.                                                                                                                |
 
 ## Known issues
 
@@ -86,6 +84,8 @@ After a recent bug fix in API Manager (RDAPI-20021), the `Authenticate to Master
 1. Open all slave managers configurations in Policy Studio, and click to **Edit** the `AuthenticateToMaster` policy.
 2. Click the **Login to Master** (Connect to URL) filter, and enter `Accept: */*` for the **Request Protocol Header**.
 3. Click the **Enter** key twice to create two blank lines after `Accept: */*`.
+
+Alternatively you can take the updated `AuthenticateToMaster` policy and apply again your configurations.
 
 Related Issue:IAP-3435
 
@@ -108,7 +108,7 @@ This section describes documentation enhancements and related documentation.
 
 ### Documentation enhancements
 
-placeholder
+There are no major changes in this update.
 
 ### Related documentation
 
