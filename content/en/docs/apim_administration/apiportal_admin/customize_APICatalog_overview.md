@@ -19,7 +19,7 @@ You can customize the following in the API Catalog view of API Portal:
 * Show only APIs associated with specified statuses.
 * Show or hide the button that enables users to try out an API. You can show the button for all users, for authenticated users only, hide it for APIs with specific tags, or hide it completely. The default is shown for all users. For more details on Try-it button visibility see Customize Try-it button visibility.
 * Set a payload size (in KB). If the response is bigger than the configured value, the response is downloaded as file. Defaults to blank, which means that downloads are disabled.
-* Swagger UI layout fo REST APIs. You can choose from:
+* Swagger UI layout of REST APIs. You can choose from:
 
   * **Multi-column** - a navigation to each endpoint appears and floats in a left column. This is the default option in API Portal.
   * **Single-column** - the layout the official Swagger UI is shipped with.
